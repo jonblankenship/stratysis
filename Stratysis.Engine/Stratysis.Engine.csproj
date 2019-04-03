@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Stratysis.DataProviders\Stratysis.DataProviders.csproj" />
+    <ProjectReference Include="..\Stratysis.Domain\Stratysis.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
