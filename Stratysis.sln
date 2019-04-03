@@ -7,9 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stratysis.Domain", "Stratys
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stratysis.Engine", "Stratysis.Engine\Stratysis.Engine.csproj", "{5F56578D-E71E-485D-AEA9-953A8318F0EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stratysis.Console", "Stratysis.Console\Stratysis.Console.csproj", "{24BD64EB-AE90-4BB9-BB50-1640629445AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stratysis.Console", "Stratysis.Console\Stratysis.Console.csproj", "{24BD64EB-AE90-4BB9-BB50-1640629445AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stratysis.DataProviders", "Stratysis.DataProviders\Stratysis.DataProviders.csproj", "{EB4EBEE6-5A3D-4434-B391-52CAA6A71EB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stratysis.DataProviders", "Stratysis.DataProviders\Stratysis.DataProviders.csproj", "{EB4EBEE6-5A3D-4434-B391-52CAA6A71EB6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2E9FC101-66C9-4B6B-84A6-125F0DB5FA15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stratysus.Domain.Tests.Unit", "Stratysus.Domain.Tests.Unit\Stratysus.Domain.Tests.Unit.csproj", "{ABDB36CC-ADB4-4AE3-8FE4-687E785E757B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +37,16 @@ Global
 		{EB4EBEE6-5A3D-4434-B391-52CAA6A71EB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB4EBEE6-5A3D-4434-B391-52CAA6A71EB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB4EBEE6-5A3D-4434-B391-52CAA6A71EB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABDB36CC-ADB4-4AE3-8FE4-687E785E757B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABDB36CC-ADB4-4AE3-8FE4-687E785E757B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABDB36CC-ADB4-4AE3-8FE4-687E785E757B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABDB36CC-ADB4-4AE3-8FE4-687E785E757B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{ABDB36CC-ADB4-4AE3-8FE4-687E785E757B} = {2E9FC101-66C9-4B6B-84A6-125F0DB5FA15}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0D1CA1B2-144E-4DFD-A203-A9F3F76375C7}

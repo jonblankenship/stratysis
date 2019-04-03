@@ -36,20 +36,26 @@ namespace Stratysis.Console
             var container = ConfigureIoC(appSettings);
 
             
-            var backtestParameters = new BacktestParameters
+            var backtestParameters = new Parameters
             {
                 StartDateTime = new DateTime(2015, 1, 1),
                 EndDateTime = new DateTime(2017, 12, 31),
+                WarmupPeriod = 20,
                 UniverseSelectionParameters = new SingleSecurityUniverseParameters
                 {
                     Symbol = "MSFT"
                 }
             };
 
-            var strategy = new SimpleMovingAverageCrossStrategy(20, 50);
-
+            var strategy = new SimpleBreakoutStrategy(20);
+            
             var runner = container.Resolve<IStrategyRunner>();
-            var results = await runner.RunAsync(strategy, backtestParameters);
+            var backtestRun = await runner.RunAsync(strategy, backtestParameters);
+
+            backtestRun.Progress.ProgressChanged += (sender, eventArgs) =>
+            {
+                System.Console.WriteLine($"Percent complete: {(sender as Progress).PercentComplete:P}");
+            };
 
             System.Console.ReadKey();
         }

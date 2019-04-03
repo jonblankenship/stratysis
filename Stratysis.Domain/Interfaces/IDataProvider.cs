@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Stratysis.Domain.Core;
 
@@ -6,8 +7,6 @@ namespace Stratysis.Domain.Interfaces
 {
     public interface IDataProvider
     {
-        Task RequestDataAsync(DateTime startDateTime, DateTime endDateTime);
-
-        event EventHandler<Slice> OnDataReceived;
+        Task<IEnumerable<Slice>> RequestDataAsync(DateTime startDateTime, DateTime endDateTime);
     }
 }

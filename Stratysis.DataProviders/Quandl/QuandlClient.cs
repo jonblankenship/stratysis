@@ -26,7 +26,7 @@ namespace Stratysis.DataProviders.Quandl
         {
             _httpClient.BaseAddress = new Uri(BaseUrl);
 
-            var uri = $"/api/v3/datasets/EOD/{symbol}/data.json?api_key={_dataProviderSettings.QuandlApiKey}";
+            var uri = $"/api/v3/datasets/EOD/{symbol}/data.json?api_key={_dataProviderSettings.QuandlApiKey}&start_date={startDateTime:yyyy-MM-dd}&end_date={endDateTime:yyyy-MM-dd}&order=asc";
             var response = await _httpClient.GetAsync(uri);
 
             response.EnsureSuccessStatusCode();

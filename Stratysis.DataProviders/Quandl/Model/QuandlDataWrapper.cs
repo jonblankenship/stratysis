@@ -13,15 +13,16 @@ namespace Stratysis.DataProviders.Quandl.Model
 
         public IEnumerable<Slice> ToSlices(string symbol)
         {
+            Slice prevSlice = null;
             foreach (var dataPoint in DatasetData.Data)
             {
-                var slice = new Slice
+                var slice = new Slice(prevSlice)
                 {
                     DateTime = DateTime.Parse(GetValue<string>(DatasetData, dataPoint, "Date")),
                     Bars = new Dictionary<string, Bar>
                     {
                         {
-                            symbol,
+                            symbol, 
                             new Bar
                             {
                                 Open = Convert.ToDecimal(GetValue<double>(DatasetData, dataPoint, "Open")),
@@ -34,6 +35,8 @@ namespace Stratysis.DataProviders.Quandl.Model
                 };
 
                 yield return slice;
+
+                prevSlice = slice;
             }
         }
 

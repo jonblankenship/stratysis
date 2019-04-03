@@ -1,6 +1,7 @@
 ﻿using Stratysis.Domain.Core;
 using Stratysis.Domain.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Stratysis.Engine.DataProviders
@@ -16,14 +17,9 @@ namespace Stratysis.Engine.DataProviders
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        public async Task RequestDataAsync(DateTime startDateTime, DateTime endDateTime)
+        public async Task<IEnumerable<Slice>> RequestDataAsync(DateTime startDateTime, DateTime endDateTime)
         {
-            foreach (var i in await _client.GetHistoricalDataAsync(_symbol, startDateTime, endDateTime))
-            {
-                OnDataReceived?.Invoke(this, i);
-            }
+            return await _client.GetHistoricalDataAsync(_symbol, startDateTime, endDateTime);
         }
-
-        public event EventHandler<Slice> OnDataReceived;
     }
 }

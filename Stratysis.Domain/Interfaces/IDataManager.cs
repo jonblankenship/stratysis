@@ -1,11 +1,14 @@
 ﻿using Stratysis.Domain.Backtesting;
-using Stratysis.Domain.Universes;
+using Stratysis.Domain.Core;
+using System;
 using System.Threading.Tasks;
 
 namespace Stratysis.Domain.Interfaces
 {
     public interface IDataManager
     {
-        Task RequestDataAsync(BacktestParameters parameters, IUniverse universe);
+        Task RequestDataAsync(Parameters parameters, IUniverse universe);
+
+        event EventHandler<Slice> OnNewSlice;
     }
 }
