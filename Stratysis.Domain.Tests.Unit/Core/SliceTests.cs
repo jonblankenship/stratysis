@@ -1,11 +1,11 @@
-﻿using FluentAssertions;
-using Stratysis.Domain.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
+using Stratysis.Domain.Core;
 using Xunit;
 
-namespace Stratysus.Domain.Tests.Unit.Core
+namespace Stratysis.Domain.Tests.Unit.Core
 {
     /// <summary>
     /// Unit tests for <see cref="Slice"/>
