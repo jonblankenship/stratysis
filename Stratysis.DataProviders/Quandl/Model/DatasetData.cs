@@ -15,7 +15,7 @@ namespace Stratysis.DataProviders.Quandl.Model
         public object ColumnIndex { get; set; }
 
         [JsonProperty(PropertyName = "column_names")]
-        public List<string> ColumnNames { get; set; }
+        public List<string> ColumnNames { get; set; } = new List<string>();
 
         [JsonProperty(PropertyName = "start_date")]
         public string StartDate { get; set; }
@@ -27,7 +27,7 @@ namespace Stratysis.DataProviders.Quandl.Model
         public string Frequency { get; set; }
 
         [JsonProperty(PropertyName = "data")]
-        public List<List<object>> Data { get; set; }
+        public List<List<object>> Data { get; set; } = new List<List<object>>();
 
         [JsonProperty(PropertyName = "collapse")]
         public object Collapse { get; set; }

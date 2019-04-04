@@ -1,8 +1,10 @@
 ﻿using System;
+using Stratysis.Domain.Backtesting.Parameters;
+using Stratysis.Domain.DataProviders;
 
 namespace Stratysis.Domain.Backtesting
 {
-    public class Parameters
+    public class BacktestParameters
     {
         public DateTime StartDateTime { get; set; }
 
@@ -10,6 +12,8 @@ namespace Stratysis.Domain.Backtesting
 
         public UniverseSelectionParameters UniverseSelectionParameters { get; set; }
 
+        public DataProviderTypes DataProviderType { get; set; }
+        
         public int WarmupPeriod { get; set; } = 0;
     }
 }

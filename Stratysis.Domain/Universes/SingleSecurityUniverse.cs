@@ -1,4 +1,4 @@
-﻿using Stratysis.Domain.Backtesting;
+﻿using Stratysis.Domain.Backtesting.Parameters;
 using System;
 using System.Collections.Generic;
 

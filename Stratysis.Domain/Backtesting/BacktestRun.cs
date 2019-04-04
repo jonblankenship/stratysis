@@ -6,14 +6,14 @@ namespace Stratysis.Domain.Backtesting
 {
     public class BacktestRun
     {
-        public BacktestRun(Parameters parameters)
+        public BacktestRun(BacktestParameters parameters)
         {
             Parameters = parameters ?? throw new ArgumentNullException(nameof(parameters));
             Progress = new Progress(parameters);
             Results = new Results(parameters);
         }
 
-        public Parameters Parameters { get; }
+        public BacktestParameters Parameters { get; }
 
         public Progress Progress { get; }
 

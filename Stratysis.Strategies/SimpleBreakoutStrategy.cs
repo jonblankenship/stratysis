@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using Stratysis.Domain.Core;
+using Stratysis.Domain.Strategies;
 
-namespace Stratysis.Domain.Strategies
+namespace Stratysis.Strategies
 {
     public class SimpleBreakoutStrategy: Strategy
     {

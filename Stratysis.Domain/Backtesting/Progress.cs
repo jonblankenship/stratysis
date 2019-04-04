@@ -5,10 +5,10 @@ namespace Stratysis.Domain.Backtesting
 {
     public class Progress
     {
-        private readonly Parameters _parameters;
+        private readonly BacktestParameters _parameters;
         private Slice _lastSlice;
 
-        public Progress(Parameters parameters)
+        public Progress(BacktestParameters parameters)
         {
             _parameters = parameters ?? throw new ArgumentNullException(nameof(parameters));
         }

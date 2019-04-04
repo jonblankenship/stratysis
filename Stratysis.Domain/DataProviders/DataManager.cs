@@ -15,7 +15,7 @@ namespace Stratysis.Domain.DataProviders
             _dataProviderFactory = dataProviderFactory ?? throw new ArgumentNullException(nameof(dataProviderFactory));
         }
 
-        public async Task RequestDataAsync(Parameters parameters, IUniverse universe)
+        public async Task RequestDataAsync(BacktestParameters parameters, IUniverse universe)
         {
             var dataSet = new SliceSet();
 
@@ -24,7 +24,7 @@ namespace Stratysis.Domain.DataProviders
             // change during the course of a backtest.
             foreach (var security in universe.GetSecurities(parameters.StartDateTime))
             {
-                var dataProvider = _dataProviderFactory.CreateDataProvider(security, DataProviderTypes.Quandl);
+                var dataProvider = _dataProviderFactory.CreateDataProvider(security, parameters.DataProviderType);
                 dataSet.Merge(await dataProvider.RequestDataAsync(parameters.StartDateTime, parameters.EndDateTime));
             }
 

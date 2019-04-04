@@ -1,23 +1,22 @@
-﻿using Newtonsoft.Json;
-using Stratysis.Domain.Core;
-using Stratysis.Domain.DataProviders;
-using Stratysis.Domain.Settings;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Stratysis.DataProviders.Quandl.Model;
+using Stratysis.Domain.Core;
 using Stratysis.Domain.Interfaces;
+using Stratysis.Domain.Settings;
 
-namespace Stratysis.DataProviders.Quandl
+namespace Stratysis.DataProviders.Quandl.Clients
 {
-    public class QuandlClient: IWebDataProviderClient
+    public class QuandlWebClient: IDataProviderClient
     {
         private readonly IDataProviderSettings _dataProviderSettings;
         private readonly HttpClient _httpClient = new HttpClient();
         private const string BaseUrl = "https://www.quandl.com";
 
-        public QuandlClient(IDataProviderSettings dataProviderSettings)
+        public QuandlWebClient(IDataProviderSettings dataProviderSettings)
         {
             _dataProviderSettings = dataProviderSettings ?? throw new ArgumentNullException(nameof(dataProviderSettings));
         }

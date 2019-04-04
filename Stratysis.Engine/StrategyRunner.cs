@@ -18,7 +18,7 @@ namespace Stratysis.Engine
             _dataManager = dataManager ?? throw new ArgumentNullException(nameof(dataManager));
         }
 
-        public async Task<BacktestRun> RunAsync(IStrategy strategy, Parameters parameters)
+        public BacktestRun Run(IStrategy strategy, BacktestParameters parameters)
         {
             var universe = _universeFactory.CreateUniverse(parameters.UniverseSelectionParameters);
 

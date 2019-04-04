@@ -1,17 +1,17 @@
-﻿using Stratysis.Domain.Core;
-using Stratysis.Domain.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Stratysis.Domain.Core;
+using Stratysis.Domain.Interfaces;
 
-namespace Stratysis.Engine.DataProviders
+namespace Stratysis.DataProviders.Quandl
 {
     public class QuandlDataProvider: IDataProvider
     {
         private readonly string _symbol;
-        private readonly IWebDataProviderClient _client;
+        private readonly IDataProviderClient _client;
 
-        public QuandlDataProvider(string symbol, IWebDataProviderClient client)
+        public QuandlDataProvider(string symbol, IDataProviderClient client)
         {
             _symbol = symbol ?? throw new ArgumentNullException(nameof(symbol));
             _client = client ?? throw new ArgumentNullException(nameof(client));

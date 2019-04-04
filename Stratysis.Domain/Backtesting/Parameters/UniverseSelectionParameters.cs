@@ -1,6 +1,6 @@
 ﻿using Stratysis.Domain.Universes;
 
-namespace Stratysis.Domain.Backtesting
+namespace Stratysis.Domain.Backtesting.Parameters
 {
     public abstract class UniverseSelectionParameters
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Stratysis.Domain.Core;
 
@@ -9,41 +10,61 @@ namespace Stratysis.DataProviders.Quandl.Model
     public class QuandlDataWrapper
     {
         [JsonProperty(PropertyName = "dataset_data")]
-        public DatasetData DatasetData { get; set; }
+        public DatasetData DatasetData { get; set; } = new DatasetData();
+
+        public static QuandlDataWrapper FromCsv(string csvContents)
+        {
+            var quandlDataWrapper = new QuandlDataWrapper();
+
+            var lines = csvContents.Split("\n");
+
+            quandlDataWrapper.DatasetData.ColumnNames = lines.First().Split(',').ToList();
+
+            foreach (var line in lines.Skip(1))
+            {
+                var values = line.Split(',').ToList();
+                quandlDataWrapper.DatasetData.Data.Add(values.Cast<object>().ToList());
+            }
+
+            return quandlDataWrapper;
+        }
 
         public IEnumerable<Slice> ToSlices(string symbol)
         {
             Slice prevSlice = null;
             foreach (var dataPoint in DatasetData.Data)
             {
-                var slice = new Slice(prevSlice)
+                if (dataPoint.Count > 1)
                 {
-                    DateTime = DateTime.Parse(GetValue<string>(DatasetData, dataPoint, "Date")),
-                    Bars = new Dictionary<string, Bar>
+                    var slice = new Slice(prevSlice)
                     {
+                        DateTime = DateTime.Parse(GetValue(DatasetData, dataPoint, "Date")),
+                        Bars = new Dictionary<string, Bar>
                         {
-                            symbol, 
-                            new Bar
                             {
-                                Open = Convert.ToDecimal(GetValue<double>(DatasetData, dataPoint, "Open")),
-                                High = Convert.ToDecimal(GetValue<double>(DatasetData, dataPoint, "High")),
-                                Low = Convert.ToDecimal(GetValue<double>(DatasetData, dataPoint, "Low")),
-                                Close = Convert.ToDecimal(GetValue<double>(DatasetData, dataPoint, "Close"))
+                                symbol,
+                                new Bar
+                                {
+                                    Open = Convert.ToDecimal(GetValue(DatasetData, dataPoint, "Open")),
+                                    High = Convert.ToDecimal(GetValue(DatasetData, dataPoint, "High")),
+                                    Low = Convert.ToDecimal(GetValue(DatasetData, dataPoint, "Low")),
+                                    Close = Convert.ToDecimal(GetValue(DatasetData, dataPoint, "Close"))
+                                }
                             }
                         }
-                    }
-                };
+                    };
 
-                yield return slice;
+                    yield return slice;
 
-                prevSlice = slice;
+                    prevSlice = slice;
+                }
             }
         }
 
-        private static T GetValue<T>(DatasetData dataset, IReadOnlyList<object> dataPoint, string name)
+        private static string GetValue(DatasetData dataset, IReadOnlyList<object> dataPoint, string name)
         {
             var index = dataset.ColumnNames.FindIndex(x => x == name);
-            return (T) dataPoint[index];
+            return dataPoint[index].ToString();
         }
     }
 }

@@ -16,13 +16,13 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
-    <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Stratysis.DataProviders\Stratysis.DataProviders.csproj" />
     <ProjectReference Include="..\Stratysis.Domain\Stratysis.Domain.csproj" />
     <ProjectReference Include="..\Stratysis.Engine\Stratysis.Engine.csproj" />
+    <ProjectReference Include="..\Stratysis.Strategies\Stratysis.Strategies.csproj" />
   </ItemGroup>
 
   <ItemGroup>

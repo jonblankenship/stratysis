@@ -1,25 +1,24 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
+﻿using Autofac;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using Stratysis.DataProviders;
 using Stratysis.DataProviders.Quandl;
+using Stratysis.DataProviders.Quandl.Clients;
 using Stratysis.Domain.Backtesting;
+using Stratysis.Domain.Backtesting.Parameters;
 using Stratysis.Domain.DataProviders;
 using Stratysis.Domain.Interfaces;
 using Stratysis.Domain.Settings;
-using Stratysis.Domain.Strategies;
 using Stratysis.Domain.Universes;
 using Stratysis.Engine;
-using Stratysis.Engine.DataProviders;
+using System;
+using System.IO;
+using Stratysis.Strategies;
 
 namespace Stratysis.Console
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             // Set up settings
             var builder = new ConfigurationBuilder()
@@ -35,8 +34,8 @@ namespace Stratysis.Console
             // Configure IoC
             var container = ConfigureIoC(appSettings);
 
-            
-            var backtestParameters = new Parameters
+            // Setup and run backtest
+            var backtestParameters = new BacktestParameters
             {
                 StartDateTime = new DateTime(2015, 1, 1),
                 EndDateTime = new DateTime(2017, 12, 31),
@@ -44,13 +43,13 @@ namespace Stratysis.Console
                 UniverseSelectionParameters = new SingleSecurityUniverseParameters
                 {
                     Symbol = "MSFT"
-                }
+                },
+                DataProviderType = DataProviderTypes.QuandlFile
             };
 
             var strategy = new SimpleBreakoutStrategy(20);
-            
             var runner = container.Resolve<IStrategyRunner>();
-            var backtestRun = await runner.RunAsync(strategy, backtestParameters);
+            var backtestRun = runner.Run(strategy, backtestParameters);
 
             backtestRun.Progress.ProgressChanged += (sender, eventArgs) =>
             {
@@ -65,7 +64,8 @@ namespace Stratysis.Console
             var builder = new ContainerBuilder();
 
             builder.RegisterType<QuandlDataProvider>().As<IDataProvider>();
-            builder.RegisterType<QuandlClient>();
+            builder.RegisterType<QuandlWebClient>();
+            builder.RegisterType<QuandlFileClient>();
             builder.RegisterType<DataProviderFactory>().As<IDataProviderFactory>();
             builder.RegisterType<StrategyRunner>().As<IStrategyRunner>();
             builder.RegisterType<DataManager>().As<IDataManager>();

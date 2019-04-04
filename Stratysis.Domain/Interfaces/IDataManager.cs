@@ -7,7 +7,7 @@ namespace Stratysis.Domain.Interfaces
 {
     public interface IDataManager
     {
-        Task RequestDataAsync(Parameters parameters, IUniverse universe);
+        Task RequestDataAsync(BacktestParameters parameters, IUniverse universe);
 
         event EventHandler<Slice> OnNewSlice;
     }

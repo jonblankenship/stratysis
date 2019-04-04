@@ -2,6 +2,7 @@
 {
     public enum DataProviderTypes
     {
-        Quandl
+        QuandlWeb,
+        QuandlFile
     }
 }

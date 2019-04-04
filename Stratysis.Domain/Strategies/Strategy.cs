@@ -14,7 +14,7 @@ namespace Stratysis.Domain.Strategies
         public bool IsWarmedUp => BacktestRun.Parameters?.WarmupPeriod == 0 ||
                                   (_lastSliceProcessed?.SequenceNumber > BacktestRun.Parameters?.WarmupPeriod);
 
-        public BacktestRun Initialize(Parameters parameters)
+        public BacktestRun Initialize(BacktestParameters parameters)
         {
             BacktestRun = new BacktestRun(parameters);
             return BacktestRun;

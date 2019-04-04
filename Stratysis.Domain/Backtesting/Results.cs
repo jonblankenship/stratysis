@@ -4,13 +4,13 @@ namespace Stratysis.Domain.Backtesting
 {
     public class Results
     {
-        private readonly Parameters _parameters;
+        private readonly BacktestParameters _parameters;
 
-        public Results(Parameters parameters)
+        public Results(BacktestParameters parameters)
         {
             _parameters = parameters ?? throw new ArgumentNullException(nameof(parameters));
         }
 
-        public Parameters Parameters => _parameters;
+        public BacktestParameters Parameters => _parameters;
     }
 }
