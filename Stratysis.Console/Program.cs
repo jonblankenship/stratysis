@@ -12,6 +12,7 @@ using Stratysis.Domain.Universes;
 using Stratysis.Engine;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Stratysis.Domain.Brokers;
 using Stratysis.Strategies;
 
@@ -19,7 +20,7 @@ namespace Stratysis.Console
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             // Set up settings
             var builder = new ConfigurationBuilder()
@@ -49,15 +50,11 @@ namespace Stratysis.Console
                 DataProviderType = DataProviderTypes.QuandlFile
             };
 
-            var strategy = new SimpleBreakoutStrategy(20);
+            var strategy = new SimpleBreakoutStrategy(20, 10);
             var runner = container.Resolve<IStrategyRunner>();
-            var backtestRun = runner.Run(strategy, backtestParameters);
 
-            backtestRun.Progress.ProgressChanged += (sender, eventArgs) =>
-            {
-                System.Console.WriteLine($"Percent complete: {(sender as Progress).PercentComplete:P}");
-            };
-
+            var backtestRun = await runner.RunAsync(strategy, backtestParameters);
+            
             System.Console.ReadKey();
         }
 

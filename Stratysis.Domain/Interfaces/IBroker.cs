@@ -17,5 +17,9 @@ namespace Stratysis.Domain.Interfaces
         void OpenOrder(Order order);
 
         void EvaluateOrders(Slice slice);
+
+        bool HasOpenPosition(string security);
+
+        Position GetOpenPosition(string security);
     }
 }

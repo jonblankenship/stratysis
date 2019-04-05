@@ -6,7 +6,7 @@
 
         public OrderAction Action { get; set; }
 
-        public OrderStatus Status { get; }
+        public OrderStatus Status { get; set; }
 
         public OrderTypes Type { get; set; }
 

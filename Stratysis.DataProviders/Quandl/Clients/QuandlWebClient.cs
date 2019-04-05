@@ -33,7 +33,7 @@ namespace Stratysis.DataProviders.Quandl.Clients
             var jsonData = await response.Content.ReadAsStringAsync();
             var data = JsonConvert.DeserializeObject<QuandlDataWrapper>(jsonData);
 
-            return data.ToSlices(symbol);
+            return data.ToSlices(symbol, startDateTime, endDateTime);
         }
     }
 }

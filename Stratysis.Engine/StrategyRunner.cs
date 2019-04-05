@@ -21,7 +21,7 @@ namespace Stratysis.Engine
             _broker = broker ?? throw new ArgumentNullException(nameof(broker));
         }
 
-        public BacktestRun Run(IStrategy strategy, BacktestParameters parameters)
+        public async Task<BacktestRun> RunAsync(IStrategy strategy, BacktestParameters parameters)
         {
             var universe = _universeFactory.CreateUniverse(parameters.UniverseSelectionParameters);
 
@@ -31,7 +31,7 @@ namespace Stratysis.Engine
             
             _dataManager.OnNewSlice += (sender, slice) => strategy.OnDataEvent(slice);
 
-            _dataManager.RequestDataAsync(parameters, universe);
+            await _dataManager.RequestDataAsync(parameters, universe);
 
             return backtestRun;
         }

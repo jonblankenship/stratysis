@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Stratysis.Domain.Core.Broker
@@ -16,6 +17,8 @@ namespace Stratysis.Domain.Core.Broker
             PositionSize = fillDetails.Quantity;
             
             _trades.Add(new Trade(order, fillDetails));
+            
+            order.Status = OrderStatus.Executed;
 
             CalculateRealizedGainLoss();
         }
@@ -55,7 +58,12 @@ namespace Stratysis.Domain.Core.Broker
                 }
             }
 
+            order.Status = OrderStatus.Executed;
+
             CalculateRealizedGainLoss();
+
+            if (Status == PositionStatus.Closed)
+                Debug.WriteLine($"{fillDetails.DateTime} Position closed: {RealizedGainLoss}");
         }
 
         public static Position InitiatePosition(Order order, FillDetails fillDetails)

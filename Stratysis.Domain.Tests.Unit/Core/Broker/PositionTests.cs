@@ -2,6 +2,7 @@
 using Stratysis.Domain.Core.Broker;
 using System;
 using System.Linq;
+using Stratysis.Domain.Core;
 using Xunit;
 
 namespace Stratysis.Domain.Tests.Unit.Core.Broker
@@ -276,5 +277,100 @@ namespace Stratysis.Domain.Tests.Unit.Core.Broker
             position.RealizedGainLoss.Should().Be(0 - 2 * Commission + (55.45m - 56.12m) * 100);
         }
 
+        [Fact]
+        public void CalculateUnrealizedGainLoss_LongPosition_MultipleLegs_CorrectAmountReturned()
+        {
+            // Arrange
+            // First leg
+            var order = new Order
+            {
+                Type = OrderTypes.Market,
+                Action = OrderAction.Buy,
+                Quantity = 150,
+                Security = "MSFT"
+            };
+            var fillDetails = new FillDetails(DateTime.UtcNow, 55.45m, Commission, 150);
+            var position = Position.InitiatePosition(order, fillDetails);
+
+            // Second leg
+            order = new Order
+            {
+                Type = OrderTypes.Market,
+                Action = OrderAction.Buy,
+                Quantity = 75,
+                Security = "MSFT"
+            };
+            fillDetails = new FillDetails(DateTime.UtcNow, 56.12m, Commission, 75);
+            position.FillOrder(order, fillDetails);
+
+            // Take partial profit
+            order = new Order
+            {
+                Type = OrderTypes.Market,
+                Action = OrderAction.Sell,
+                Quantity = 100,
+                Security = "MSFT"
+            };
+            fillDetails = new FillDetails(DateTime.UtcNow, 58.22m, Commission, 100);
+            position.FillOrder(order, fillDetails);
+
+            var asOfBar = new Bar { Close = 59.21m };
+
+            var expectedAmount = 50 * (asOfBar.Close - 55.45m) + 75 * (asOfBar.Close - 56.12m);
+
+            // Act
+            var result = position.GetUnrealizedGainLoss(asOfBar);
+
+            // Assert
+            result.Should().Be(expectedAmount);
+        }
+
+        [Fact]
+        public void CalculateUnrealizedGainLoss_ShortPosition_MultipleLegs_CorrectAmountReturned()
+        {
+            // Arrange
+            // First leg
+            var order = new Order
+            {
+                Type = OrderTypes.Market,
+                Action = OrderAction.Sell,
+                Quantity = 150,
+                Security = "MSFT"
+            };
+            var fillDetails = new FillDetails(DateTime.UtcNow, 55.45m, Commission, 150);
+            var position = Position.InitiatePosition(order, fillDetails);
+
+            // Second leg
+            order = new Order
+            {
+                Type = OrderTypes.Market,
+                Action = OrderAction.Buy,
+                Quantity = 75,
+                Security = "MSFT"
+            };
+            fillDetails = new FillDetails(DateTime.UtcNow, 56.12m, Commission, 75);
+            position.FillOrder(order, fillDetails);
+
+            // Take partial profit
+            order = new Order
+            {
+                Type = OrderTypes.Market,
+                Action = OrderAction.Sell,
+                Quantity = 100,
+                Security = "MSFT"
+            };
+            fillDetails = new FillDetails(DateTime.UtcNow, 51.22m, Commission, 100);
+            position.FillOrder(order, fillDetails);
+
+            var asOfBar = new Bar { Close = 52.16m };
+
+            var expectedAmount = 75 * (55.45m - asOfBar.Close) + 100 * (51.22m - asOfBar.Close);
+
+            // Act
+            var result = position.GetUnrealizedGainLoss(asOfBar);
+
+            // Assert
+            result.Should().Be(expectedAmount);
+        }
     }
 }

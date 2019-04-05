@@ -1,11 +1,10 @@
 ﻿using Stratysis.Domain.Core;
 using Stratysis.Domain.Core.Broker;
 using Stratysis.Domain.Interfaces;
+using Stratysis.Domain.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Stratysis.Domain.Backtesting;
-using Stratysis.Domain.Settings;
 
 namespace Stratysis.Domain.Brokers
 {
@@ -50,5 +49,9 @@ namespace Stratysis.Domain.Brokers
                 account.EvaluateOrders(_settings.DefaultCommission, slice);
             }
         }
+
+        public bool HasOpenPosition(string security) => DefaultAccount.HasOpenPosition(security);
+
+        public Position GetOpenPosition(string security) => DefaultAccount.OpenPositions.SingleOrDefault(p => p.Security == security);
     }
 }

@@ -43,6 +43,8 @@ namespace Stratysis.Domain.Core.Broker
             }
         }
 
+        public bool HasOpenPosition(string security) => OpenPositions.Any(p => p.Security == security);
+
         private void FillOrder(Order order, FillDetails fillDetails)
         {
             var openPosition = OpenPositions.FirstOrDefault(p => p.Security == order.Security);
