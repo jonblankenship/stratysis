@@ -1,5 +1,6 @@
 ﻿using Stratysis.Domain.Core;
 using System;
+using System.Diagnostics;
 
 namespace Stratysis.Domain.Backtesting
 {
@@ -34,6 +35,7 @@ namespace Stratysis.Domain.Backtesting
             _lastSlice = slice;
             if (Math.Floor(PercentComplete * 100) % 5 == 0 && Math.Floor(PercentComplete * 100) != Math.Floor(lastPercentage * 100))
             {
+                Debug.WriteLine($"Progress: {PercentComplete}");
                 ProgressChanged?.Invoke(this, null);
             }
         }

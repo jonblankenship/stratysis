@@ -29,34 +29,38 @@ namespace Stratysis.DataProviders.Quandl.Model
             return quandlDataWrapper;
         }
 
-        public IEnumerable<Slice> ToSlices(string symbol)
+        public IEnumerable<Slice> ToSlices(string symbol, DateTime startDateTime, DateTime endDateTime)
         {
             Slice prevSlice = null;
             foreach (var dataPoint in DatasetData.Data)
             {
                 if (dataPoint.Count > 1)
                 {
-                    var slice = new Slice(prevSlice)
+                    var dateTime = DateTime.Parse(GetValue(DatasetData, dataPoint, "Date"));
+                    if (dateTime >= startDateTime && dateTime <= endDateTime)
                     {
-                        DateTime = DateTime.Parse(GetValue(DatasetData, dataPoint, "Date")),
-                        Bars = new Dictionary<string, Bar>
+                        var slice = new Slice(prevSlice)
                         {
+                            DateTime = dateTime,
+                            Bars = new Dictionary<string, Bar>
                             {
-                                symbol,
-                                new Bar
                                 {
-                                    Open = Convert.ToDecimal(GetValue(DatasetData, dataPoint, "Open")),
-                                    High = Convert.ToDecimal(GetValue(DatasetData, dataPoint, "High")),
-                                    Low = Convert.ToDecimal(GetValue(DatasetData, dataPoint, "Low")),
-                                    Close = Convert.ToDecimal(GetValue(DatasetData, dataPoint, "Close"))
+                                    symbol,
+                                    new Bar
+                                    {
+                                        Open = Convert.ToDecimal(GetValue(DatasetData, dataPoint, "Open")),
+                                        High = Convert.ToDecimal(GetValue(DatasetData, dataPoint, "High")),
+                                        Low = Convert.ToDecimal(GetValue(DatasetData, dataPoint, "Low")),
+                                        Close = Convert.ToDecimal(GetValue(DatasetData, dataPoint, "Close"))
+                                    }
                                 }
                             }
-                        }
-                    };
+                        };
 
-                    yield return slice;
-
-                    prevSlice = slice;
+                        yield return slice;
+                        
+                        prevSlice = slice;
+                    }
                 }
             }
         }

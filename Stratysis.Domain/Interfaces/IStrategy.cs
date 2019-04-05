@@ -6,7 +6,7 @@ namespace Stratysis.Domain.Interfaces
 {
     public interface IStrategy
     {
-        BacktestRun Initialize(BacktestParameters parameters);
+        BacktestRun Initialize(IBroker broker, BacktestParameters parameters);
 
         void OnDataEvent(Slice slice);
 

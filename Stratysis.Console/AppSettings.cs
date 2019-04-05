@@ -9,5 +9,7 @@ namespace Stratysis.Console
         public string QuandlFolderPath { get; set; }
 
         public string TestSetting { get; set; }
+
+        public decimal DefaultCommission { get; set; }
     }
 }

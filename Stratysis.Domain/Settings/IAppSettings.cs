@@ -2,5 +2,6 @@
 {
     public interface IAppSettings: IDataProviderSettings
     {
+        decimal DefaultCommission { get; set; }
     }
 }

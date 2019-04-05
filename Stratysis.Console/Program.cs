@@ -12,13 +12,15 @@ using Stratysis.Domain.Universes;
 using Stratysis.Engine;
 using System;
 using System.IO;
+using System.Threading.Tasks;
+using Stratysis.Domain.Brokers;
 using Stratysis.Strategies;
 
 namespace Stratysis.Console
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             // Set up settings
             var builder = new ConfigurationBuilder()
@@ -37,6 +39,7 @@ namespace Stratysis.Console
             // Setup and run backtest
             var backtestParameters = new BacktestParameters
             {
+                StartingCash = 10_000m,
                 StartDateTime = new DateTime(2015, 1, 1),
                 EndDateTime = new DateTime(2017, 12, 31),
                 WarmupPeriod = 20,
@@ -47,15 +50,11 @@ namespace Stratysis.Console
                 DataProviderType = DataProviderTypes.QuandlFile
             };
 
-            var strategy = new SimpleBreakoutStrategy(20);
+            var strategy = new SimpleBreakoutStrategy(20, 10);
             var runner = container.Resolve<IStrategyRunner>();
-            var backtestRun = runner.Run(strategy, backtestParameters);
 
-            backtestRun.Progress.ProgressChanged += (sender, eventArgs) =>
-            {
-                System.Console.WriteLine($"Percent complete: {(sender as Progress).PercentComplete:P}");
-            };
-
+            var backtestRun = await runner.RunAsync(strategy, backtestParameters);
+            
             System.Console.ReadKey();
         }
 
@@ -70,6 +69,7 @@ namespace Stratysis.Console
             builder.RegisterType<StrategyRunner>().As<IStrategyRunner>();
             builder.RegisterType<DataManager>().As<IDataManager>();
             builder.RegisterType<UniverseFactory>().As<IUniverseFactory>();
+            builder.RegisterType<TestBroker>().As<IBroker>();
             builder.RegisterInstance(appSettings);
             builder.RegisterInstance(appSettings).As<IDataProviderSettings>();
 
