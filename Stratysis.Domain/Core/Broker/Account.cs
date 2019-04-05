@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Stratysis.Domain.Backtesting;
 
 namespace Stratysis.Domain.Core.Broker
 {
@@ -29,9 +30,9 @@ namespace Stratysis.Domain.Core.Broker
             _orders.Add(order);
         }
 
-        public void EvaluateOrders(Slice slice)
+        public void EvaluateOrders(decimal defaultCommission, Slice slice)
         {
-            var spec = new OrderExecutedSpecification(slice);
+            var spec = new OrderExecutedSpecification(defaultCommission, slice);
             foreach (var order in OpenOrders)
             {
                 var specResult = spec.IsSatisfiedBy(order);

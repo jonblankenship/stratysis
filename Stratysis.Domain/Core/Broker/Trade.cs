@@ -15,6 +15,12 @@ namespace Stratysis.Domain.Core.Broker
 
         public Order Order => _order;
 
+        public DateTime FillDateTime => _fillDetails.DateTime;
+
         public decimal FillPrice => _fillDetails.Price;
+
+        public decimal Commission => _fillDetails.Commission;
+
+        public int FillQuantity => _fillDetails.Quantity;
     }
 }

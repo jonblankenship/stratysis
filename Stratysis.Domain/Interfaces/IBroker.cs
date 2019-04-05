@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Stratysis.Domain.Core;
+﻿using Stratysis.Domain.Core;
 using Stratysis.Domain.Core.Broker;
+using System.Collections.Generic;
 
 namespace Stratysis.Domain.Interfaces
 {

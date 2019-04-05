@@ -4,10 +4,11 @@ namespace Stratysis.Domain.Core.Broker
 {
     public class FillDetails
     {
-        public FillDetails(DateTime dateTime, decimal price, int quantity)
+        public FillDetails(DateTime dateTime, decimal price, decimal commission, int quantity)
         {
             DateTime = dateTime;
             Price = price;
+            Commission = commission;
             Quantity = quantity;
         }
 
@@ -15,6 +16,8 @@ namespace Stratysis.Domain.Core.Broker
 
         public decimal Price { get; }
 
-        public int Quantity { get; }
+        public decimal Commission { get; }
+
+        public int Quantity { get; set; }
     }
 }

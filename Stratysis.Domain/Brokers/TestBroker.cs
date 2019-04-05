@@ -4,12 +4,20 @@ using Stratysis.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Stratysis.Domain.Backtesting;
+using Stratysis.Domain.Settings;
 
 namespace Stratysis.Domain.Brokers
 {
     public class TestBroker: IBroker
     {
+        private readonly IAppSettings _settings;
         private readonly List<Account> _accounts = new List<Account>();
+
+        public TestBroker(IAppSettings settings)
+        {
+            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
+        }
 
         public IEnumerable<Account> Accounts => _accounts;
 
@@ -39,7 +47,7 @@ namespace Stratysis.Domain.Brokers
         {
             foreach (var account in Accounts)
             {
-                account.EvaluateOrders(slice);
+                account.EvaluateOrders(_settings.DefaultCommission, slice);
             }
         }
     }

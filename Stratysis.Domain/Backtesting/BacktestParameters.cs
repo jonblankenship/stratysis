@@ -12,6 +12,8 @@ namespace Stratysis.Domain.Backtesting
 
         public decimal StartingCash { get; set; }
 
+        public decimal Commission { get; set; }
+
         public UniverseSelectionParameters UniverseSelectionParameters { get; set; }
 
         public DataProviderTypes DataProviderType { get; set; }

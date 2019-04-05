@@ -1,13 +1,17 @@
 ﻿using System;
+using Stratysis.Domain.Backtesting;
 
 namespace Stratysis.Domain.Core.Broker
 {
     public class OrderExecutedSpecification
     {
+        private readonly decimal _defaultCommission;
         private readonly Slice _slice;
 
-        public OrderExecutedSpecification(Slice slice)
+        public OrderExecutedSpecification(decimal defaultCommission, Slice slice)
         {
+            if (defaultCommission <= 0) throw new ArgumentOutOfRangeException(nameof(defaultCommission));
+            _defaultCommission = defaultCommission;
             _slice = slice ?? throw new ArgumentNullException(nameof(slice));
         }
 
@@ -18,7 +22,7 @@ namespace Stratysis.Domain.Core.Broker
             // Market orders
             if (order.Type == OrderTypes.Market)
             {
-                return (true, new FillDetails(_slice.DateTime, currentBar.Open, order.Quantity));
+                return (true, new FillDetails(_slice.DateTime, currentBar.Open, _defaultCommission, order.Quantity));
             }
 
             // Non-market buy orders
@@ -27,12 +31,12 @@ namespace Stratysis.Domain.Core.Broker
                 if (order.Type == OrderTypes.Limit)
                 {
                     if (order.LimitPrice >= currentBar.Low)
-                        return (true, new FillDetails(_slice.DateTime, Math.Min(currentBar.Open, order.LimitPrice), order.Quantity));
+                        return (true, new FillDetails(_slice.DateTime, Math.Min(currentBar.Open, order.LimitPrice), _defaultCommission, order.Quantity));
                 }
                 else if (order.Type == OrderTypes.Stop)
                 {
                     if (order.StopPrice <= currentBar.High)
-                        return (true, new FillDetails(_slice.DateTime, Math.Max(currentBar.Open, order.StopPrice), order.Quantity)); 
+                        return (true, new FillDetails(_slice.DateTime, Math.Max(currentBar.Open, order.StopPrice), _defaultCommission, order.Quantity)); 
                 }
             }
 
@@ -42,12 +46,12 @@ namespace Stratysis.Domain.Core.Broker
                 if (order.Type == OrderTypes.Limit)
                 {
                     if (order.LimitPrice <= currentBar.High)
-                        return (true, new FillDetails(_slice.DateTime, Math.Max(currentBar.Open, order.LimitPrice), order.Quantity));
+                        return (true, new FillDetails(_slice.DateTime, Math.Max(currentBar.Open, order.LimitPrice), _defaultCommission, order.Quantity));
                 }
                 else if (order.Type == OrderTypes.Stop)
                 {
                     if (order.StopPrice >= currentBar.Low)
-                        return (true, new FillDetails(_slice.DateTime, Math.Min(currentBar.Open, order.StopPrice), order.Quantity));
+                        return (true, new FillDetails(_slice.DateTime, Math.Min(currentBar.Open, order.StopPrice), _defaultCommission, order.Quantity));
                 }
             }
 
