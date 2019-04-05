@@ -7,15 +7,19 @@ namespace Stratysis.Domain.Strategies
 {
     public class Strategy: IStrategy
     {
+        private IBroker _broker;
         private Slice _lastSliceProcessed;
 
         public BacktestRun BacktestRun { get; private set; }
 
         public bool IsWarmedUp => BacktestRun.Parameters?.WarmupPeriod == 0 ||
-                                  (_lastSliceProcessed?.SequenceNumber > BacktestRun.Parameters?.WarmupPeriod);
+                                  _lastSliceProcessed?.SequenceNumber > BacktestRun.Parameters?.WarmupPeriod;
 
-        public BacktestRun Initialize(BacktestParameters parameters)
+        public BacktestRun Initialize(IBroker broker, BacktestParameters parameters)
         {
+            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
+            _broker = broker ?? throw new ArgumentNullException(nameof(broker));
+
             BacktestRun = new BacktestRun(parameters);
             return BacktestRun;
         }
@@ -32,6 +36,9 @@ namespace Stratysis.Domain.Strategies
         private void PreProcessNewData(Slice slice)
         {
             // Calculate any indicator values for the slice, perform other pre-processing
+            _broker.EvaluateOrders(slice);
+
+
         }
 
         protected virtual void ProcessNewData(Slice slice)

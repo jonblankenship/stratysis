@@ -10,6 +10,8 @@ namespace Stratysis.Domain.Backtesting
 
         public DateTime EndDateTime { get; set; }
 
+        public decimal StartingCash { get; set; }
+
         public UniverseSelectionParameters UniverseSelectionParameters { get; set; }
 
         public DataProviderTypes DataProviderType { get; set; }

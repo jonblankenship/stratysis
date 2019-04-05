@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Stratysis.Domain.Indicators;
 
 namespace Stratysis.Domain.Core
 {
@@ -19,8 +16,16 @@ namespace Stratysis.Domain.Core
         }
 
         public DateTime DateTime => _parentSlice.DateTime;
+        
+        public Bar Bar => _bar;
+
+        public decimal Open => _bar.Open;
 
         public decimal High => _bar.High;
+
+        public decimal Low => _bar.Low;
+
+        public decimal Close => _bar.Close;
 
         public SecuritySlice this[int i]
         {

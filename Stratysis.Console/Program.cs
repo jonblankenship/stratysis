@@ -12,6 +12,7 @@ using Stratysis.Domain.Universes;
 using Stratysis.Engine;
 using System;
 using System.IO;
+using Stratysis.Domain.Brokers;
 using Stratysis.Strategies;
 
 namespace Stratysis.Console
@@ -37,6 +38,7 @@ namespace Stratysis.Console
             // Setup and run backtest
             var backtestParameters = new BacktestParameters
             {
+                StartingCash = 10_000m,
                 StartDateTime = new DateTime(2015, 1, 1),
                 EndDateTime = new DateTime(2017, 12, 31),
                 WarmupPeriod = 20,
@@ -70,6 +72,7 @@ namespace Stratysis.Console
             builder.RegisterType<StrategyRunner>().As<IStrategyRunner>();
             builder.RegisterType<DataManager>().As<IDataManager>();
             builder.RegisterType<UniverseFactory>().As<IUniverseFactory>();
+            builder.RegisterType<TestBroker>().As<IBroker>();
             builder.RegisterInstance(appSettings);
             builder.RegisterInstance(appSettings).As<IDataProviderSettings>();
 
