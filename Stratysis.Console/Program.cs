@@ -40,7 +40,7 @@ namespace Stratysis.Console
             var backtestParameters = new BacktestParameters
             {
                 StartingCash = 10_000m,
-                StartDateTime = new DateTime(2015, 1, 1),
+                StartDateTime = new DateTime(2001, 1, 1),
                 EndDateTime = new DateTime(2017, 12, 31),
                 WarmupPeriod = 20,
                 UniverseSelectionParameters = new SingleSecurityUniverseParameters
