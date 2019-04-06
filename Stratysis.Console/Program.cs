@@ -47,7 +47,7 @@ namespace Stratysis.Console
                 {
                     Symbol = "MSFT"
                 },
-                DataProviderType = DataProviderTypes.QuandlWeb
+                DataProviderType = DataProviderTypes.QuandlFile
             };
 
             var strategy = new SimpleBreakoutStrategy(20, 10);
