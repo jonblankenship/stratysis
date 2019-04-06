@@ -2,6 +2,7 @@
 using Stratysis.Domain.Core;
 using Stratysis.Domain.Interfaces;
 using System;
+using System.Diagnostics;
 using Stratysis.Domain.Core.Broker;
 
 namespace Stratysis.Domain.Strategies
@@ -27,11 +28,20 @@ namespace Stratysis.Domain.Strategies
 
         public void OnDataEvent(Slice slice)
         {
-            PreProcessNewData(slice);
+            if (slice != null)
+            {
+                PreProcessNewData(slice);
 
-            ProcessNewData(slice);
+                ProcessNewData(slice);
 
-            PostProcessNewData(slice);
+                PostProcessNewData(slice);
+            }
+            else
+            {
+                // End of data stream
+                BacktestRun.Results.CalculateResults(_broker.DefaultAccount, _lastSliceProcessed);
+                Debug.WriteLine(BacktestRun.Results);
+            }
         }
 
         public event EventHandler<Progress> ProgressReported;

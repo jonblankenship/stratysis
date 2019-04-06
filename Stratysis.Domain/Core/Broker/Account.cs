@@ -50,7 +50,9 @@ namespace Stratysis.Domain.Core.Broker
             var openPosition = OpenPositions.FirstOrDefault(p => p.Security == order.Security);
             if (openPosition != null)
             {
-                openPosition.FillOrder(order, fillDetails);
+                var trade = openPosition.FillOrder(order, fillDetails);
+                if (trade.IsExitTrade)
+                    AccountBalance += trade.RealizedGainLoss;
             }
             else
             {

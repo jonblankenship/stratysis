@@ -32,6 +32,9 @@ namespace Stratysis.Domain.DataProviders
             {
                 OnNewSlice?.Invoke(this, slice.Value);                
             }
+
+            // Invoke with null value to indicate end of stream
+            OnNewSlice?.Invoke(this, null);
         }
 
         public event EventHandler<Slice> OnNewSlice;
