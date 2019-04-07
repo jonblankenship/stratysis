@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Stratysis.Domain.Core;
 
 namespace Stratysis.Domain.Indicators
 {
-    public class SingleValueIndicator: Indicator
+    public abstract class SingleValueIndicator<TValue>: Indicator<TValue>
     {
-
     }
 }

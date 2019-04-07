@@ -6,26 +6,25 @@ namespace Stratysis.Domain.Core
     {
         private readonly Slice _parentSlice;
         private readonly string _symbol;
-        private readonly Bar _bar;
 
         public SecuritySlice(Slice parentSlice, string symbol, Bar bar)
         {
             _parentSlice = parentSlice ?? throw new ArgumentNullException(nameof(parentSlice));
             _symbol = symbol ?? throw new ArgumentNullException(nameof(symbol));
-            _bar = bar ?? throw new ArgumentNullException(nameof(bar));
+            Bar = bar ?? throw new ArgumentNullException(nameof(bar));
         }
 
         public DateTime DateTime => _parentSlice.DateTime;
-        
-        public Bar Bar => _bar;
 
-        public decimal Open => _bar.Open;
+        public Bar Bar { get; }
 
-        public decimal High => _bar.High;
+        public decimal Open => Bar.Open;
 
-        public decimal Low => _bar.Low;
+        public decimal High => Bar.High;
 
-        public decimal Close => _bar.Close;
+        public decimal Low => Bar.Low;
+
+        public decimal Close => Bar.Close;
 
         public SecuritySlice this[int i]
         {

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
+using Stratysis.Domain.Backtesting;
 using Stratysis.Domain.Core;
 using Stratysis.Domain.Core.Broker;
 using Stratysis.Domain.Strategies;
+using Stratysis.Domain.Indicators;
 
 namespace Stratysis.Strategies
 {
@@ -10,6 +12,10 @@ namespace Stratysis.Strategies
     {
         private readonly int _entryBreakoutPeriod;
         private readonly int _exitBreakoutPeriod;
+        private High _highLong;
+        private High _highShort;
+        private Low _lowLong;
+        private Low _lowShort;
 
         public SimpleBreakoutStrategy(int entryBreakoutPeriod, int exitBreakoutPeriod)
         {
@@ -17,6 +23,19 @@ namespace Stratysis.Strategies
             if (exitBreakoutPeriod <= 0) throw new ArgumentOutOfRangeException(nameof(exitBreakoutPeriod));
             _entryBreakoutPeriod = entryBreakoutPeriod;
             _exitBreakoutPeriod = exitBreakoutPeriod;
+        }
+
+        public override void Initialize(BacktestParameters parameters)
+        {
+            _highLong = new High(20);
+            _highShort = new High(10);
+            _lowLong = new Low(20);
+            _lowShort = new Low(10);
+
+            RegisterIndicator(_highLong);
+            RegisterIndicator(_highShort);
+            RegisterIndicator(_lowLong);
+            RegisterIndicator(_lowShort);
         }
 
         protected override void ProcessNewData(Slice slice)
@@ -28,16 +47,14 @@ namespace Stratysis.Strategies
                     var openPosition = GetOpenPosition(security);
                     if (openPosition == null)
                     {
-                        var rangeHigh = GetPeriodHigh(slice[security][-1], _entryBreakoutPeriod);
-                        if (slice[security].High > rangeHigh)
+                        if (slice[security].High > _highLong[security][-1])
                         {
                             BuyAtMarket(security, 100);
                             Debug.WriteLine($"{slice.DateTime} Entry: Buy at {slice[security][0].Close}");
                         }
                         else
                         {
-                            var rangeLow = GetPeriodLow(slice[security][-1], _entryBreakoutPeriod);
-                            if (slice[security].Low < rangeLow)
+                            if (slice[security].Low < _lowLong[security][-1])
                             {
                                 SellAtMarket(security, 100);
                                 Debug.WriteLine($"{slice.DateTime} Entry: Sell at {slice[security][0].Close}");
@@ -48,16 +65,14 @@ namespace Stratysis.Strategies
                     {
                         if (openPosition.Direction == PositionDirection.Long)
                         {
-                            var rangeLow = GetPeriodLow(slice[security][-1], _exitBreakoutPeriod);
-                            if (slice[security].Low < rangeLow)
+                            if (slice[security].Low < _lowShort[security][-1])
                             {
                                 SellAtMarket(security, 100);
                             }
                         }
                         else
                         {
-                            var rangeHigh = GetPeriodHigh(slice[security][-1], _exitBreakoutPeriod);
-                            if (slice[security].High < rangeHigh)
+                            if (slice[security].High < _highShort[security][-1])
                             {
                                 BuyAtMarket(security, 100);
                             }
@@ -65,36 +80,6 @@ namespace Stratysis.Strategies
                     }
                 }
             }
-        }
-
-        private decimal GetPeriodHigh(SecuritySlice slice, int period)
-        {
-            var rangeHigh = slice[0].High;
-            for (int i = period; i > 0; i--)
-            {
-                var sliceHigh = slice[0 - i].High;
-                if (sliceHigh > rangeHigh)
-                {
-                    rangeHigh = sliceHigh;
-                }
-            }
-
-            return rangeHigh;
-        }
-
-        private decimal GetPeriodLow(SecuritySlice slice, int period)
-        {
-            var rangeLow = slice[0].Low;
-            for (int i = period; i > 0; i--)
-            {
-                var sliceLow = slice[0 - i].Low;
-                if (sliceLow < rangeLow)
-                {
-                    rangeLow = sliceLow;
-                }
-            }
-
-            return rangeLow;
         }
     }
 }

@@ -2,6 +2,8 @@
 using Stratysis.Domain.Core;
 using Stratysis.Domain.Interfaces;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Stratysis.Domain.Core.Broker;
 
@@ -11,6 +13,7 @@ namespace Stratysis.Domain.Strategies
     {
         private IBroker _broker;
         private Slice _lastSliceProcessed;
+        private IList<IIndicator> _indicators = new List<IIndicator>();
 
         public BacktestRun BacktestRun { get; private set; }
 
@@ -21,10 +24,17 @@ namespace Stratysis.Domain.Strategies
         {
             if (parameters == null) throw new ArgumentNullException(nameof(parameters));
             _broker = broker ?? throw new ArgumentNullException(nameof(broker));
-
             BacktestRun = new BacktestRun(parameters);
+
+            _indicators.Clear();
+
+            Initialize(parameters);
+
             return BacktestRun;
         }
+
+        public virtual void Initialize(BacktestParameters parameters)
+        { }
 
         public void OnDataEvent(Slice slice)
         {
@@ -73,10 +83,20 @@ namespace Stratysis.Domain.Strategies
             _broker.OpenOrder(order);
         }
 
+        protected void RegisterIndicator(IIndicator indicator)
+        {
+            _indicators.Add(indicator);
+        }
+
         private void PreProcessNewData(Slice slice)
         {
             // Calculate any indicator values for the slice, perform other pre-processing
             _broker.EvaluateOrders(slice);
+
+            foreach (var indicator in _indicators)
+            {
+                indicator.Calculate(slice);
+            }
         }
 
         protected virtual void ProcessNewData(Slice slice)
