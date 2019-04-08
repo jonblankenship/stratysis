@@ -29,7 +29,7 @@ namespace Stratysis.Domain.Core.Broker
 
         public PositionDirection Direction { get; }
 
-        public decimal RealizedGainLoss => Trades.Where(t => t.IsExitTrade).Sum(t => t.RealizedGainLoss);
+        public decimal RealizedGainLoss => Trades.Sum(t => t.RealizedGainLoss);
 
         public int PositionSize { get; private set; }
 
@@ -173,6 +173,7 @@ namespace Stratysis.Domain.Core.Broker
             {
                 if (trade.Order.Action == OrderAction.Buy)
                 {
+                    trade.RealizedGainLoss = 0 - trade.Commission;
                     fillsQueue.Enqueue(new FillDetails(trade.FillDateTime, trade.FillPrice, trade.Commission, trade.FillQuantity));
                 }
                 else
@@ -207,6 +208,7 @@ namespace Stratysis.Domain.Core.Broker
             {
                 if (trade.Order.Action == OrderAction.Sell)
                 {
+                    trade.RealizedGainLoss = 0 - trade.Commission;
                     fillsQueue.Enqueue(new FillDetails(trade.FillDateTime, trade.FillPrice, trade.Commission, trade.FillQuantity));
                 }
                 else

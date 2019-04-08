@@ -1,10 +1,10 @@
-﻿using System;
-using System.Diagnostics;
-using Stratysis.Domain.Backtesting;
+﻿using Stratysis.Domain.Backtesting;
 using Stratysis.Domain.Core;
 using Stratysis.Domain.Core.Broker;
 using Stratysis.Domain.Strategies;
-using Stratysis.Domain.Indicators;
+using System;
+using System.Diagnostics;
+using Stratysis.Indicators;
 
 namespace Stratysis.Strategies
 {
@@ -27,10 +27,10 @@ namespace Stratysis.Strategies
 
         public override void Initialize(BacktestParameters parameters)
         {
-            _highLong = new High(20);
-            _highShort = new High(10);
-            _lowLong = new Low(20);
-            _lowShort = new Low(10);
+            _highLong = new High(_entryBreakoutPeriod);
+            _highShort = new High(_exitBreakoutPeriod);
+            _lowLong = new Low(_entryBreakoutPeriod);
+            _lowShort = new Low(_exitBreakoutPeriod);
 
             RegisterIndicator(_highLong);
             RegisterIndicator(_highShort);

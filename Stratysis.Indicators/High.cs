@@ -1,13 +1,14 @@
-﻿using Stratysis.Domain.Core;
-using System;
+﻿using System;
+using Stratysis.Domain.Core;
+using Stratysis.Domain.Indicators;
 
-namespace Stratysis.Domain.Indicators
+namespace Stratysis.Indicators
 {
-    public class Low: SingleValueIndicator<decimal>
+    public class High: SingleValueIndicator<decimal>
     {
         private readonly int _period;
 
-        public Low(int period)
+        public High(int period)
         {
             if (period <= 0) throw new ArgumentOutOfRangeException(nameof(period));
             _period = period;
@@ -21,25 +22,25 @@ namespace Stratysis.Domain.Indicators
 
             foreach(var security in slice.Securities)
             {
-                SetValue(security, GetPeriodLow(slice[security], _period));
+                SetValue(security, GetPeriodHigh(slice[security], _period));
             }
         }
 
-        private decimal GetPeriodLow(SecuritySlice slice, int period)
+        private decimal GetPeriodHigh(SecuritySlice slice, int period)
         {
             if (!IsWarmedUp) return 0;
 
-            var rangeLow = slice[0].Low;
+            var rangeHigh = slice[0].High;
             for (int i = period; i > 0; i--)
             {
-                var sliceLow = slice[0 - i].Low;
-                if (sliceLow < rangeLow)
+                var sliceHigh = slice[0 - i]?.High ?? 0;
+                if (sliceHigh > rangeHigh)
                 {
-                    rangeLow = sliceLow;
+                    rangeHigh = sliceHigh;
                 }
             }
 
-            return rangeLow;
+            return rangeHigh;
         }
     }
 }
