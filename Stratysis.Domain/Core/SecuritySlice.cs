@@ -36,7 +36,10 @@ namespace Stratysis.Domain.Core
                 if (i == 0)
                     return this;
 
-                return _parentSlice[i][_symbol];
+                if (_parentSlice[i] != null)                    
+                    return _parentSlice[i][_symbol];
+
+                return null;
             }
         }
     }

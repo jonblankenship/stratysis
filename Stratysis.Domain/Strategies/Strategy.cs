@@ -4,6 +4,7 @@ using Stratysis.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Stratysis.Domain.Core.Broker;
 
 namespace Stratysis.Domain.Strategies
@@ -54,6 +55,8 @@ namespace Stratysis.Domain.Strategies
         }
 
         public event EventHandler<Progress> ProgressReported;
+
+        public bool AreIndicatorsWarmedUp(string security, int periodOffset) => _indicators.All(i => i.IsWarmedUp(security, periodOffset));
 
         public bool HasOpenPosition(string security) => _broker.HasOpenPosition(security);
 

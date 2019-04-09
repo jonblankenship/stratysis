@@ -30,40 +30,29 @@ namespace Stratysis.Indicators
         {
             base.Calculate(slice);
 
-            IsWarmedUp = slice.SequenceNumber >= _period;
-
             foreach(var security in slice.Securities)
             {
-                SetValue(security, GetPeriodHigh(slice[security], _period));
+                var rangeHigh = GetPeriodHigh(slice[security], _period);
+                if (rangeHigh > 0)
+                    SetValue(security, rangeHigh);
             }
         }
 
         private decimal GetPeriodHigh(SecuritySlice slice, int period)
         {
-            try
-            {
-                if (!IsWarmedUp) return 0;
+            if (slice[0 - period] == null) return 0;
 
-                var rangeHigh = slice[0].High;
-                for (int i = period; i > 0; i--)
+            var rangeHigh = slice[0].High;
+            for (int i = period; i > 0; i--)
+            {
+                var sliceHigh = slice[0 - i].High;
+                if (sliceHigh > rangeHigh)
                 {
-                    if (slice[0 - i] is null)
-                        continue;
-
-                    var sliceHigh = slice[0 - i]?.High ?? 0;
-                    if (sliceHigh > rangeHigh)
-                    {
-                        rangeHigh = sliceHigh;
-                    }
+                    rangeHigh = sliceHigh;
                 }
+            }
 
-                return rangeHigh;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            return rangeHigh;
         }
     }
 }

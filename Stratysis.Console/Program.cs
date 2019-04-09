@@ -51,7 +51,7 @@ namespace Stratysis.Console
                 DataProviderType = DataProviderTypes.QuandlWeb
             };
 
-            var strategy = new SimpleBreakoutStrategy(20, 10);
+            var strategy = new SimpleBreakoutStrategy(20, 10, 20);
             var runner = container.Resolve<IStrategyRunner>();
 
             var backtestRun = await runner.RunAsync(strategy, backtestParameters);

@@ -19,11 +19,6 @@ namespace Stratysis.Domain.Indicators
         }
 
         /// <summary>
-        /// Indicates whether the indicator instance has seen enough data to calculate its value(s)
-        /// </summary>
-        public bool IsWarmedUp { get; protected set; }
-
-        /// <summary>
         /// The current value(s) of this indicator instance, represented as an <see cref="IndicatorSlice{TValue}"/>
         /// </summary>
         public IndicatorSlice<TValue> Values { get; protected set; }
@@ -34,6 +29,21 @@ namespace Stratysis.Domain.Indicators
         /// <param name="security"></param>
         /// <returns></returns>
         public IndicatorSecuritySlice<TValue> this[string security] => Values[security];
+
+        /// <summary>
+        /// Returns a <see cref="bool"/> indicating whether this indicator is warmed up for the given <see cref="security"/> and <see cref="periodOffset"/>
+        /// </summary>
+        /// <param name="security">The symbol of the security</param>
+        /// <param name="periodOffset">The period offset</param>
+        /// <returns></returns>
+        public bool IsWarmedUp(string security, int periodOffset)
+        {
+            if (this[security] is null) return false;
+
+            if (this[security][periodOffset] == null) return false;
+
+            return true;
+        }
 
         /// <summary>
         /// Sets the value of this indicator for the given <see cref="security"/>
