@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using Stratysis.Domain.Core;
 using Stratysis.Domain.Core.Broker;

@@ -5,10 +5,19 @@ using System.Linq;
 
 namespace Stratysis.Domain.Core.Broker
 {
+    /// <summary>
+    /// Domain class representing a position in an <see cref="Account"/>
+    /// </summary>
     public class Position
     {
         private readonly List<Trade> _trades = new List<Trade>();
 
+        /// <summary>
+        /// Instantiates a <see cref="Position"/> established as the result of the given <see cref="order"/> filled
+        /// with the given <see cref="FillDetails"/>
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="fillDetails"></param>
         public Position(Order order, FillDetails fillDetails)
         {
             Security = order.Security;
@@ -23,25 +32,55 @@ namespace Stratysis.Domain.Core.Broker
             CalculateRealizedGainLoss();
         }
 
+        /// <summary>
+        /// The symbol of the security for this <see cref="Position"/>
+        /// </summary>
         public string Security { get; }
 
+        /// <summary>
+        /// The <see cref="PositionStatus"/>
+        /// </summary>
         public PositionStatus Status { get; private set; }
 
+        /// <summary>
+        /// The <see cref="PositionDirection"/>
+        /// </summary>
         public PositionDirection Direction { get; }
 
+        /// <summary>
+        /// The realized gain/loss of this <see cref="Position"/>
+        /// </summary>
         public decimal RealizedGainLoss => Trades.Sum(t => t.RealizedGainLoss);
 
+        /// <summary>
+        /// The size of this <see cref="Position"/>
+        /// </summary>
         public int PositionSize { get; private set; }
 
+        /// <summary>
+        /// The <see cref="Trade"/>s executed to establish, increase, reduce or close this <see cref="Position"/>
+        /// </summary>
         public IEnumerable<Trade> Trades => _trades;
 
+        /// <summary>
+        /// The <see cref="Trade"/>s executed to reduce or close this <see cref="Position"/>
+        /// </summary>
         public IEnumerable<Trade> ClosedTrades => _trades.Where(t => t.IsExitTrade);
-        
-        public static Position InitiatePosition(Order order, FillDetails fillDetails)
-        {
-            return new Position(order, fillDetails);
-        }
 
+        /// <summary>
+        /// Instantiates a <see cref="Position"/> established as the result of the given <see cref="order"/> filled
+        /// with the given <see cref="FillDetails"/>
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="fillDetails"></param>
+        public static Position InitiatePosition(Order order, FillDetails fillDetails) => new Position(order, fillDetails);
+
+        /// <summary>
+        /// Fills the given <see cref="order"/> with the <see cref="fillDetails"/> against an instance of this <see cref="Position"/>
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="fillDetails"></param>
+        /// <returns></returns>
         public Trade FillOrder(Order order, FillDetails fillDetails)
         {
             Trade newTrade;
@@ -78,12 +117,22 @@ namespace Stratysis.Domain.Core.Broker
             return newTrade;
         }
 
+        /// <summary>
+        /// Calculates the unrealized gain/loss of an instance of this <see cref="Position"/> as of the <see cref="asOfSlice"/>
+        /// </summary>
+        /// <param name="asOfSlice">The slice as of which to calculate the unrealized gain/loss</param>
+        /// <returns></returns>
         public decimal GetUnrealizedGainLoss(Slice asOfSlice)
         {
             var asOfBar = asOfSlice[Security].Bar;
             return GetUnrealizedGainLoss(asOfBar);
         }
 
+        /// <summary>
+        /// Calculates the unrealized gain/loss of an instance of this <see cref="Position"/> as of the <see cref="asOfBar"/>
+        /// </summary>
+        /// <param name="asOfBar">The bar as of which to calculate the unrealized gain/loss</param>
+        /// <returns></returns>
         public decimal GetUnrealizedGainLoss(Bar asOfBar)
         {
             if (Direction == PositionDirection.Long) return CalculatedLongUnrealizedGainLoss(asOfBar);

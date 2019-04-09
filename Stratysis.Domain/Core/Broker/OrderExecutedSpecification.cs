@@ -1,8 +1,11 @@
 ﻿using System;
-using Stratysis.Domain.Backtesting;
 
 namespace Stratysis.Domain.Core.Broker
 {
+    /// <summary>
+    /// Specification to test whether an instance of an <see cref="Order"/> would have been filled as of a
+    /// given <see cref="Slice"/> instance
+    /// </summary>
     public class OrderExecutedSpecification
     {
         private readonly decimal _defaultCommission;
@@ -15,6 +18,13 @@ namespace Stratysis.Domain.Core.Broker
             _slice = slice ?? throw new ArgumentNullException(nameof(slice));
         }
 
+        /// <summary>
+        /// Evaluates whether <see cref="order"/> would have been filled as of the <see cref="Slice"/> instance
+        /// used to instantiate this specification
+        /// </summary>
+        /// <param name="order">The <see cref="Order"/> instance to test</param>
+        /// <returns>A tuple with a bool IsExecuted flag indicating whether the <see cref="order"/> would have
+        /// been executed, and a FillDetails object with the fill details if IsExecuted == true</returns>
         public (bool IsExecuted, FillDetails FillDetails) IsSatisfiedBy(Order order)
         {
             var currentBar = _slice[order.Security].Bar;

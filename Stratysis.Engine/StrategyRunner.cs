@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace Stratysis.Engine
 {
+    /// <summary>
+    /// Service to backtest trading strategies.  Main entry point for the backtesting engine.
+    /// </summary>
     public class StrategyRunner: IStrategyRunner
     {
         private readonly IUniverseFactory _universeFactory;
@@ -21,6 +24,12 @@ namespace Stratysis.Engine
             _broker = broker ?? throw new ArgumentNullException(nameof(broker));
         }
 
+        /// <summary>
+        /// Runs a backtest of the given <see cref="strategy"/> using the <see cref="parameters"/> provided
+        /// </summary>
+        /// <param name="strategy">The <see cref="IStrategy"/> to test</param>
+        /// <param name="parameters">The <see cref="BacktestParameters"/> to use for the test</param>
+        /// <returns></returns>
         public async Task<BacktestRun> RunAsync(IStrategy strategy, BacktestParameters parameters)
         {
             var universe = _universeFactory.CreateUniverse(parameters.UniverseSelectionParameters);

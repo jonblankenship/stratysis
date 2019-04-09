@@ -29,7 +29,10 @@ namespace Stratysis.Domain.Indicators
                 if (i == 0)
                     return this.Value;
 
-                return _parentSlice[i][_symbol].Value;
+                if (_parentSlice[i][_symbol] != null)
+                    return _parentSlice[i][_symbol].Value;
+
+                return default;
             }
         }
     }

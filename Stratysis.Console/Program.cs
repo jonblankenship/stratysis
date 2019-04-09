@@ -11,6 +11,7 @@ using Stratysis.Domain.Settings;
 using Stratysis.Domain.Universes;
 using Stratysis.Engine;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Stratysis.Domain.Brokers;
@@ -43,11 +44,11 @@ namespace Stratysis.Console
                 StartDateTime = new DateTime(2001, 1, 1),
                 EndDateTime = new DateTime(2017, 12, 31),
                 WarmupPeriod = 20,
-                UniverseSelectionParameters = new SingleSecurityUniverseParameters
+                UniverseSelectionParameters = new MultipleSecurityUniverseParameters
                 {
-                    Symbol = "MSFT"
+                    Symbols = new List<string> { "MSFT", "V", "KO" }
                 },
-                DataProviderType = DataProviderTypes.QuandlFile
+                DataProviderType = DataProviderTypes.QuandlWeb
             };
 
             var strategy = new SimpleBreakoutStrategy(20, 10);
@@ -69,7 +70,7 @@ namespace Stratysis.Console
             builder.RegisterType<StrategyRunner>().As<IStrategyRunner>();
             builder.RegisterType<DataManager>().As<IDataManager>();
             builder.RegisterType<UniverseFactory>().As<IUniverseFactory>();
-            builder.RegisterType<TestBroker>().As<IBroker>();
+            builder.RegisterType<MockBroker>().As<IBroker>();
             builder.RegisterInstance(appSettings);
             builder.RegisterInstance(appSettings).As<IDataProviderSettings>();
 

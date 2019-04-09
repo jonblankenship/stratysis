@@ -8,8 +8,13 @@ namespace Stratysis.Domain.Universes
     {
         public IUniverse CreateUniverse(UniverseSelectionParameters parameters)
         {
-            if (parameters.Type == UniverseSelectionTypes.SingleSecurity)
-                return new SingleSecurityUniverse(parameters as SingleSecurityUniverseParameters);
+            switch (parameters.Type)
+            {
+                case UniverseSelectionTypes.SingleSecurity:
+                    return new SingleSecurityUniverse(parameters as SingleSecurityUniverseParameters);
+                case UniverseSelectionTypes.MultipleSecurities:
+                    return new MultipleSecurityUniverse(parameters as MultipleSecurityUniverseParameters);
+            }
 
             throw new NotImplementedException();
         }

@@ -8,12 +8,12 @@ using System.Linq;
 
 namespace Stratysis.Domain.Brokers
 {
-    public class TestBroker: IBroker
+    public class MockBroker: IBroker
     {
         private readonly IAppSettings _settings;
         private readonly List<Account> _accounts = new List<Account>();
 
-        public TestBroker(IAppSettings settings)
+        public MockBroker(IAppSettings settings)
         {
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }

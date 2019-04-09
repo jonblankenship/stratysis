@@ -2,7 +2,6 @@
 using Stratysis.Domain.Core;
 using Stratysis.Domain.Interfaces;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Stratysis.Domain.Core.Broker;

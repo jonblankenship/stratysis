@@ -19,12 +19,11 @@ namespace Stratysis.DataProviders.Quandl.Clients
         public QuandlWebClient(IDataProviderSettings dataProviderSettings)
         {
             _dataProviderSettings = dataProviderSettings ?? throw new ArgumentNullException(nameof(dataProviderSettings));
+            _httpClient.BaseAddress = new Uri(BaseUrl);
         }
 
         public async Task<IEnumerable<Slice>> GetHistoricalDataAsync(string symbol, DateTime startDateTime, DateTime endDateTime)
         {
-            _httpClient.BaseAddress = new Uri(BaseUrl);
-
             var uri = $"/api/v3/datasets/EOD/{symbol}/data.json?api_key={_dataProviderSettings.QuandlApiKey}&start_date={startDateTime:yyyy-MM-dd}&end_date={endDateTime:yyyy-MM-dd}&order=asc";
             var response = await _httpClient.GetAsync(uri);
 

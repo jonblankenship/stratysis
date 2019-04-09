@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Stratysis.Domain.Core
+﻿namespace Stratysis.Domain.Core
 {
     public class Bar
     {

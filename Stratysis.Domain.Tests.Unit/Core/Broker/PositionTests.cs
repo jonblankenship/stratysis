@@ -1,7 +1,7 @@
-﻿using FluentAssertions;
-using Stratysis.Domain.Core.Broker;
+﻿using Stratysis.Domain.Core.Broker;
 using System;
 using System.Linq;
+using FluentAssertions;
 using Stratysis.Domain.Core;
 using Xunit;
 

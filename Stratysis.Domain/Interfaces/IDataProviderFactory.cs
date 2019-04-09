@@ -1,5 +1,4 @@
-﻿using Stratysis.Domain.Backtesting.Parameters;
-using Stratysis.Domain.DataProviders;
+﻿using Stratysis.Domain.DataProviders;
 
 namespace Stratysis.Domain.Interfaces
 {
