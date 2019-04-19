@@ -73,6 +73,7 @@ namespace Stratysis.Domain.Strategies
             };
             _broker.OpenOrder(order);
         }
+
         public void SellAtMarket(string security, int quantity)
         {
             var order = new Order

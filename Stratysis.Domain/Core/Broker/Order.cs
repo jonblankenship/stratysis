@@ -1,10 +1,17 @@
-﻿namespace Stratysis.Domain.Core.Broker
+﻿using System.Collections.Generic;
+
+namespace Stratysis.Domain.Core.Broker
 {
     /// <summary>
     /// Domain class representing an order submitted to a broker
     /// </summary>
     public class Order
     {
+        public Order()
+        {
+            AttachedOrders = new List<Order>();
+        }
+
         /// <summary>
         /// The security symbol for the <see cref="Order"/>
         /// </summary>
@@ -41,5 +48,11 @@
         /// </summary>
         /// <remarks>Should be zero for market and stop orders; non-zero for limit orders</remarks>
         public decimal LimitPrice { get; set; }
+
+        /// <summary>
+        /// Collection of <see cref="Order"/> to be submitted if this <see cref="Order"/> instance is filled
+        /// </summary>
+        /// <remarks>Used for stop-loss and take profit orders on entry orders.</remarks>
+        public IEnumerable<Order> AttachedOrders { get; }
     }
 }

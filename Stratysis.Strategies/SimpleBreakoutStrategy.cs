@@ -59,45 +59,55 @@ namespace Stratysis.Strategies
                     if (openPosition == null)
                     {
                         // We don't have an open position for this security yet, so check entry conditions
-                        if (AreIndicatorsWarmedUp(security, -3)) // Ensure all indicators are warmed up as of 3 periods ago
-                        {
-                            // Check for long entry criteria
-                            if (slice[security].High > _highLong[security][-1] && _sma[security][0] > _sma[security][-3])
-                            {
-                                BuyAtMarket(security, 100);
-                                Debug.WriteLine($"{slice.DateTime} Entry: Buy at {slice[security][0].Close}");
-                            }
-                            else
-                            {
-                                // Check for short entry criteria
-                                if (slice[security].Low < _lowLong[security][-1] && _sma[security][0] < _sma[security][-3])
-                                {
-                                    SellAtMarket(security, 100);
-                                    Debug.WriteLine($"{slice.DateTime} Entry: Sell at {slice[security][0].Close}");
-                                }
-                            }
-                        }
+                        EvaluateEntryConditions(security, slice);
                     }
                     else
                     {
                         // We already have an open position for this security, so check exit conditions
-                        if (openPosition.Direction == PositionDirection.Long)
-                        {
-                            // Check for long exit criteria
-                            if (slice[security].Low < _lowShort[security][-1])
-                            {
-                                SellAtMarket(security, 100);
-                            }
-                        }
-                        else
-                        {
-                            // Check for short exit criteria
-                            if (slice[security].High < _highShort[security][-1])
-                            {
-                                BuyAtMarket(security, 100);
-                            }
-                        }
+                        EvaluateExitConditions(openPosition, security, slice);
                     }
+                }
+            }
+        }
+
+        protected void EvaluateEntryConditions(string security, Slice slice)
+        {
+            if (AreIndicatorsWarmedUp(security, -3)) // Ensure all indicators are warmed up as of 3 periods ago
+            {
+                // Check for long entry criteria
+                if (slice[security].High > _highLong[security][-1] && _sma[security][0] > _sma[security][-3])
+                {
+                    BuyAtMarket(security, 100);
+                    Debug.WriteLine($"{slice.DateTime} Entry: Buy at {slice[security][0].Close}");
+                }
+                else
+                {
+                    // Check for short entry criteria
+                    if (slice[security].Low < _lowLong[security][-1] && _sma[security][0] < _sma[security][-3])
+                    {
+                        SellAtMarket(security, 100);
+                        Debug.WriteLine($"{slice.DateTime} Entry: Sell at {slice[security][0].Close}");
+                    }
+                }
+            }
+        }
+
+        protected void EvaluateExitConditions(Position openPosition, string security, Slice slice)
+        {
+            if (openPosition.Direction == PositionDirection.Long)
+            {
+                // Check for long exit criteria
+                if (slice[security].Low < _lowShort[security][-1])
+                {
+                    SellAtMarket(security, 100);
+                }
+            }
+            else
+            {
+                // Check for short exit criteria
+                if (slice[security].High < _highShort[security][-1])
+                {
+                    BuyAtMarket(security, 100);
                 }
             }
         }
