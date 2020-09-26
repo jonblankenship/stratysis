@@ -18,7 +18,7 @@ namespace Stratysis.DataProviders.Quandl.Clients
             _dataProviderSettings = dataProviderSettings ?? throw new ArgumentNullException(nameof(dataProviderSettings));
         }
 
-        public async Task<IEnumerable<Slice>> GetHistoricalDataAsync(string symbol, DateTime startDateTime, DateTime endDateTime)
+        public async Task<IEnumerable<Slice>> GetHistoricalDataAsync(string symbol, DateTime startDateTime, DateTime endDateTime, Granularities granularity)
         {
             var filePath = Path.Combine("../../../../", _dataProviderSettings.QuandlFolderPath, $"{ symbol}.csv");
 

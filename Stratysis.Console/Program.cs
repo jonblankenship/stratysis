@@ -14,7 +14,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Stratysis.DataProviders.Oanda;
+using Stratysis.DataProviders.Oanda.Clients;
 using Stratysis.Domain.Brokers;
+using Stratysis.Domain.Core;
 using Stratysis.Strategies;
 
 namespace Stratysis.Console
@@ -38,17 +41,31 @@ namespace Stratysis.Console
             var container = ConfigureIoC(appSettings);
 
             // Setup and run backtest
+            //var backtestParameters = new BacktestParameters
+            //{
+            //    StartingCash = 10_000m,
+            //    StartDateTime = new DateTime(2001, 1, 1),
+            //    EndDateTime = new DateTime(2017, 12, 31),
+            //    WarmupPeriod = 20,
+            //    UniverseSelectionParameters = new MultipleSecurityUniverseParameters
+            //    {
+            //        Symbols = new List<string> { "MSFT", "V", "KO" }
+            //    },
+            //    DataProviderType = DataProviderTypes.QuandlWeb
+            //};
+
             var backtestParameters = new BacktestParameters
             {
                 StartingCash = 10_000m,
-                StartDateTime = new DateTime(2001, 1, 1),
-                EndDateTime = new DateTime(2017, 12, 31),
+                StartDateTime = new DateTime(2020, 1, 1),
+                EndDateTime = new DateTime(2020, 9, 30),
                 WarmupPeriod = 20,
-                UniverseSelectionParameters = new MultipleSecurityUniverseParameters
+                UniverseSelectionParameters = new SingleSecurityUniverseParameters
                 {
-                    Symbols = new List<string> { "MSFT", "V", "KO" }
+                    Symbol = "EUR_USD"
                 },
-                DataProviderType = DataProviderTypes.QuandlWeb
+                DataProviderType = DataProviderTypes.OandaWeb,
+                Granularity = Granularities.M5
             };
 
             var strategy = new SimpleBreakoutStrategy(20, 10, 20);
@@ -63,9 +80,9 @@ namespace Stratysis.Console
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<QuandlDataProvider>().As<IDataProvider>();
             builder.RegisterType<QuandlWebClient>();
             builder.RegisterType<QuandlFileClient>();
+            builder.RegisterType<OandaWebClient>();
             builder.RegisterType<DataProviderFactory>().As<IDataProviderFactory>();
             builder.RegisterType<StrategyRunner>().As<IStrategyRunner>();
             builder.RegisterType<DataManager>().As<IDataManager>();

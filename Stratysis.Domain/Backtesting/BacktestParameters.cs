@@ -1,5 +1,6 @@
 ﻿using System;
 using Stratysis.Domain.Backtesting.Parameters;
+using Stratysis.Domain.Core;
 using Stratysis.Domain.DataProviders;
 
 namespace Stratysis.Domain.Backtesting
@@ -19,5 +20,7 @@ namespace Stratysis.Domain.Backtesting
         public DataProviderTypes DataProviderType { get; set; }
         
         public int WarmupPeriod { get; set; } = 0;
+
+        public Granularities Granularity { get; set; } = Granularities.D;
     }
 }

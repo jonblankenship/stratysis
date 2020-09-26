@@ -6,6 +6,8 @@ namespace Stratysis.Console
     {
         public string QuandlApiKey { get; set; }
 
+        public string OandaApiKey { get; set; }
+
         public string QuandlFolderPath { get; set; }
 
         public string TestSetting { get; set; }

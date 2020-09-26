@@ -35,7 +35,7 @@ namespace Stratysis.Domain.DataProviders
             foreach (var security in universe.GetSecurities(parameters.StartDateTime))
             {
                 var dataProvider = _dataProviderFactory.CreateDataProvider(security, parameters.DataProviderType);
-                var data = await dataProvider.RequestDataAsync(parameters.StartDateTime, parameters.EndDateTime);
+                var data = await dataProvider.RequestDataAsync(parameters.StartDateTime, parameters.EndDateTime, parameters.Granularity);
                 dataSet.Merge(data);
             }
 

@@ -22,11 +22,11 @@ namespace Stratysis.Domain.Backtesting
             RemainingOpenPositions = account.Positions.Count(p => p.Status == PositionStatus.Open);
             Wins = account.Positions.Sum(p => p.ClosedTrades.Count(t => t.RealizedGainLoss > 0));
             Losses = account.Positions.Sum(p => p.ClosedTrades.Count(t => t.RealizedGainLoss <= 0));
-            WinPercentage = (decimal)Wins / TotalClosedTrades;
-            Expectancy = account.Positions.Sum(p => p.ClosedTrades.Sum(t => t.RealizedGainLoss)) / TotalClosedTrades;
-            AverageWin = account.Positions.Sum(p => p.ClosedTrades.Where(t => t.RealizedGainLoss > 0).Sum(t => t.RealizedGainLoss)) / Wins;
-            AverageLoss = account.Positions.Sum(p => p.ClosedTrades.Where(t => t.RealizedGainLoss <= 0).Sum(t => t.RealizedGainLoss)) / Losses;
-            GainLossPercentage = (account.AccountBalance - _parameters.StartingCash) / _parameters.StartingCash;
+            WinPercentage = TotalClosedTrades == 0 ? 0 : (decimal)Wins / TotalClosedTrades;
+            Expectancy = TotalClosedTrades == 0 ? 0 : account.Positions.Sum(p => p.ClosedTrades.Sum(t => t.RealizedGainLoss)) / TotalClosedTrades;
+            AverageWin = Wins == 0 ? 0 : account.Positions.Sum(p => p.ClosedTrades.Where(t => t.RealizedGainLoss > 0).Sum(t => t.RealizedGainLoss)) / Wins;
+            AverageLoss = Losses == 0 ? 0 : account.Positions.Sum(p => p.ClosedTrades.Where(t => t.RealizedGainLoss <= 0).Sum(t => t.RealizedGainLoss)) / Losses;
+            GainLossPercentage = _parameters.StartingCash == 0 ? 0 : (account.AccountBalance - _parameters.StartingCash) / _parameters.StartingCash;
             FinalAccountBalance = account.AccountBalance;
         }
 

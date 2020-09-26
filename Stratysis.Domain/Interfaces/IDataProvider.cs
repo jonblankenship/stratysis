@@ -7,6 +7,6 @@ namespace Stratysis.Domain.Interfaces
 {
     public interface IDataProvider
     {
-        Task<IEnumerable<Slice>> RequestDataAsync(DateTime startDateTime, DateTime endDateTime);
+        Task<IEnumerable<Slice>> RequestDataAsync(DateTime startDateTime, DateTime endDateTime, Granularities granularity);
     }
 }

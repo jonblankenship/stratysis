@@ -6,6 +6,7 @@
     public enum DataProviderTypes
     {
         QuandlWeb,
-        QuandlFile
+        QuandlFile,
+        OandaWeb
     }
 }

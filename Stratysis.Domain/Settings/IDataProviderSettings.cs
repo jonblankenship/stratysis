@@ -5,5 +5,7 @@
         string QuandlApiKey { get; set; }
 
         string QuandlFolderPath { get; set; }
+
+        string OandaApiKey { get; set; }
     }
 }
