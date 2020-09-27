@@ -13,7 +13,7 @@ namespace Stratysis.Domain.Core.Broker
 
         public OrderExecutedSpecification(decimal defaultCommission, Slice slice)
         {
-            if (defaultCommission <= 0) throw new ArgumentOutOfRangeException(nameof(defaultCommission));
+            if (defaultCommission < 0) throw new ArgumentOutOfRangeException(nameof(defaultCommission));
             _defaultCommission = defaultCommission;
             _slice = slice ?? throw new ArgumentNullException(nameof(slice));
         }

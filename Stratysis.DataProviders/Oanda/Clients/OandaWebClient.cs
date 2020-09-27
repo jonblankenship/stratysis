@@ -28,6 +28,11 @@ namespace Stratysis.DataProviders.Oanda.Clients
 
         public async Task<IEnumerable<Slice>> GetHistoricalDataAsync(string symbol, DateTime startDateTime, DateTime endDateTime, Granularities granularity)
         {
+            if (startDateTime > DateTime.Today)
+                startDateTime = DateTime.Today;
+            if (endDateTime > DateTime.Today)
+                endDateTime = DateTime.Today;
+
             TimeSpan requestInterval;
 
             switch (granularity)
@@ -56,26 +61,18 @@ namespace Stratysis.DataProviders.Oanda.Clients
 
                 var uri = $"/v3/instruments/{symbol}/candles?granularity={granularity}&from={tempStartDateTime}&to={tempEndDateTime}";
 
-                try
-                {
-                    var response = await _httpClient.GetAsync(uri);
+                var response = await _httpClient.GetAsync(uri);
 
-                    response.EnsureSuccessStatusCode();
+                response.EnsureSuccessStatusCode();
 
-                    var jsonData = await response.Content.ReadAsStringAsync();
-                    var data = JsonConvert.DeserializeObject<OandaDataWrapper>(jsonData);
-                    var slices = data.ToSlices(symbol, startDateTime, endDateTime, prevSlice);
-                    prevSlice = slices.Last();
-                    results.AddRange(slices);
+                var jsonData = await response.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<OandaDataWrapper>(jsonData);
+                var slices = data.ToSlices(symbol, startDateTime, endDateTime, prevSlice);
+                prevSlice = slices.Last();
+                results.AddRange(slices);
 
-                    tempStartDateTime = tempEndDateTime.AddSeconds(1);
-                    tempEndDateTime = tempEndDateTime.Add(requestInterval);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
+                tempStartDateTime = tempEndDateTime.AddSeconds(1);
+                tempEndDateTime = tempEndDateTime.Add(requestInterval);
             } while (tempEndDateTime < endDateTime && tempEndDateTime <= DateTime.UtcNow);
 
             return results;

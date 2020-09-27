@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Microsoft.Extensions.Configuration;
 using Stratysis.DataProviders;
-using Stratysis.DataProviders.Quandl;
 using Stratysis.DataProviders.Quandl.Clients;
 using Stratysis.Domain.Backtesting;
 using Stratysis.Domain.Backtesting.Parameters;
@@ -11,10 +10,8 @@ using Stratysis.Domain.Settings;
 using Stratysis.Domain.Universes;
 using Stratysis.Engine;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Stratysis.DataProviders.Oanda;
 using Stratysis.DataProviders.Oanda.Clients;
 using Stratysis.Domain.Brokers;
 using Stratysis.Domain.Core;
@@ -65,13 +62,15 @@ namespace Stratysis.Console
                     Symbol = "EUR_USD"
                 },
                 DataProviderType = DataProviderTypes.OandaWeb,
-                Granularity = Granularities.M5
+                Granularity = Granularities.D,
+                Commission = 0
             };
 
             var strategy = new SimpleBreakoutStrategy(20, 10, 20);
             var runner = container.Resolve<IStrategyRunner>();
 
             var backtestRun = await runner.RunAsync(strategy, backtestParameters);
+
             
             System.Console.ReadKey();
         }
