@@ -77,7 +77,7 @@ namespace Stratysis.Wpf.ViewModels
 
         private async Task ExecuteRunCommandAsync(object arg)
         {
-            await _strategyRunner.RunAsync(
+            var results = await _strategyRunner.RunAsync(
                 _selectedStrategy, 
                 BacktestParametersViewModel.BacktestParameters, 
                 StrategyParametersViewModel.StrategyParameters);
