@@ -29,14 +29,18 @@ namespace Stratysis.Engine
         /// </summary>
         /// <param name="strategy">The <see cref="IStrategy"/> to test</param>
         /// <param name="parameters">The <see cref="BacktestParameters"/> to use for the test</param>
+        /// <param name="strategyParameters">The strategy-specific <see cref="IStrategyParameters"/> to use for the test</param>
         /// <returns></returns>
-        public async Task<BacktestRun> RunAsync(IStrategy strategy, BacktestParameters parameters)
+        public async Task<BacktestRun> RunAsync(
+            IStrategy strategy, 
+            BacktestParameters parameters,
+            IStrategyParameters strategyParameters)
         {
             var universe = _universeFactory.CreateUniverse(parameters.UniverseSelectionParameters);
 
             _broker.Reset(parameters.StartingCash);
 
-            var backtestRun = strategy.Initialize(_broker, parameters);
+            var backtestRun = strategy.Initialize(_broker, parameters, strategyParameters);
             
             _dataManager.OnNewSlice += (sender, slice) => strategy.OnDataEvent(slice);
 

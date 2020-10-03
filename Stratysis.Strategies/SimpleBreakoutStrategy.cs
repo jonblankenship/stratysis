@@ -4,6 +4,7 @@ using Stratysis.Domain.Core.Broker;
 using Stratysis.Domain.Strategies;
 using System;
 using System.Diagnostics;
+using Stratysis.Domain.Interfaces;
 using Stratysis.Indicators;
 
 namespace Stratysis.Strategies
@@ -11,9 +12,10 @@ namespace Stratysis.Strategies
     public class SimpleBreakoutStrategy: Strategy
     {
         // Indicator parameters
-        private readonly int _entryBreakoutPeriod;
-        private readonly int _exitBreakoutPeriod;
-        private readonly int _smaPeriod;
+        private SimpleBreakoutStrategyParameters _strategyParameters;
+        private int _entryBreakoutPeriod;
+        private int _exitBreakoutPeriod;
+        private int _smaPeriod;
 
         // Indicators
         private High _highLong;
@@ -21,19 +23,18 @@ namespace Stratysis.Strategies
         private Low _lowLong;
         private Low _lowShort;
         private SimpleMovingAverage _sma;
-
-        public SimpleBreakoutStrategy(int entryBreakoutPeriod, int exitBreakoutPeriod, int smaPeriod)
+        
+        public override void Initialize(BacktestParameters parameters, IStrategyParameters strategyParameters)
         {
-            if (entryBreakoutPeriod <= 0) throw new ArgumentOutOfRangeException(nameof(entryBreakoutPeriod));
-            if (exitBreakoutPeriod <= 0) throw new ArgumentOutOfRangeException(nameof(exitBreakoutPeriod));
-            if (smaPeriod <= 0) throw new ArgumentOutOfRangeException(nameof(smaPeriod));
-            _entryBreakoutPeriod = entryBreakoutPeriod;
-            _exitBreakoutPeriod = exitBreakoutPeriod;
-            _smaPeriod = smaPeriod;
-        }
+            if (strategyParameters.GetType() != typeof(SimpleBreakoutStrategyParameters))
+                throw new ArgumentException($"Expected {nameof(strategyParameters)} of type {nameof(SimpleBreakoutStrategyParameters)}.");
 
-        public override void Initialize(BacktestParameters parameters)
-        {
+            strategyParameters.Validate();
+            _strategyParameters = (SimpleBreakoutStrategyParameters)strategyParameters;
+            _entryBreakoutPeriod = _strategyParameters.EntryBreakoutPeriod;
+            _exitBreakoutPeriod = _strategyParameters.ExitBreakoutPeriod;
+            _smaPeriod = _strategyParameters.SmaPeriod;
+
             // Instantiate the indicators needed for this strategy
             _highLong = new High(_entryBreakoutPeriod);
             _highShort = new High(_exitBreakoutPeriod);

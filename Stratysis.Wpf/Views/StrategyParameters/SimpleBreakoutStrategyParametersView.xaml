@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="Stratysis.Wpf.Views.StrategyParameters.SimpleBreakoutStrategyParametersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Stratysis.Wpf.Views.StrategyParameters"
+             mc:Ignorable="d" >
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"></ColumnDefinition>
+            <ColumnDefinition Width="100"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Label>Entry Breakout Period</Label>
+        <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Margin="2" Text="{Binding EntryBreakoutPeriod}"></TextBox>
+        <Label Grid.Row="1">Exit Breakout Period</Label>
+        <TextBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Margin="2" Text="{Binding ExitBreakoutPeriod}"></TextBox>
+        <Label Grid.Row="2">SMA Period</Label>
+        <TextBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" Margin="2" Text="{Binding SmaPeriod}"></TextBox>
+    </Grid>
+</UserControl>

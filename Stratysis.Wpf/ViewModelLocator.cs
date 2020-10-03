@@ -10,5 +10,9 @@ namespace Stratysis.Wpf
     {
         public MainViewModel MainViewModel => App.ServiceProvider.GetRequiredService<MainViewModel>();
 
+        public ParametersViewModel ParametersViewModel => App.ServiceProvider.GetRequiredService<ParametersViewModel>();
+
+        public ChartsViewModel ChartsViewModel => App.ServiceProvider.GetRequiredService<ChartsViewModel>();
+
     }
 }

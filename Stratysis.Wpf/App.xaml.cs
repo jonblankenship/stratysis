@@ -18,7 +18,9 @@ using Stratysis.Domain.Interfaces;
 using Stratysis.Domain.Settings;
 using Stratysis.Domain.Universes;
 using Stratysis.Engine;
+using Stratysis.Strategies;
 using Stratysis.Wpf.ViewModels;
+using Stratysis.Wpf.Views;
 
 namespace Stratysis.Wpf
 {
@@ -55,12 +57,17 @@ namespace Stratysis.Wpf
                             services.AddSingleton<IDataManager, DataManager>();
                             services.AddSingleton<IUniverseFactory, UniverseFactory>();
                             services.AddSingleton<IBroker, MockBroker>();
+                            services.AddSingleton<IStrategiesService, StrategiesService>();
 
                             // Register ViewModels
                             services.AddSingleton<MainViewModel>();
+                            services.AddSingleton<ParametersViewModel>();
+                            services.AddSingleton<ChartsViewModel>();
 
                             // Register Views
                             services.AddSingleton<MainWindow>();
+                            services.AddSingleton<ParametersView>();
+                            services.AddSingleton<ChartsView>();
                         })
                         .ConfigureLogging(logging =>
                         {

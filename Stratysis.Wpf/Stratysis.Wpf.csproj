@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FancyCandles" Version="1.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="3.1.8" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.8" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.8" />
@@ -17,6 +18,13 @@
   <ItemGroup>
     <ProjectReference Include="..\Stratysis.DataProviders\Stratysis.DataProviders.csproj" />
     <ProjectReference Include="..\Stratysis.Engine\Stratysis.Engine.csproj" />
+    <ProjectReference Include="..\Stratysis.Strategies\Stratysis.Strategies.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\ChartsView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -26,7 +34,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\" />
+    <Page Update="Views\ChartsView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
 </Project>

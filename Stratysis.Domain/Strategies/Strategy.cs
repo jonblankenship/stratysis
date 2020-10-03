@@ -13,14 +13,16 @@ namespace Stratysis.Domain.Strategies
     {
         private IBroker _broker;
         private Slice _lastSliceProcessed;
-        private IList<IIndicator> _indicators = new List<IIndicator>();
+        private readonly IList<IIndicator> _indicators = new List<IIndicator>();
+
+        public string StrategyName => GetType().Name;
 
         public BacktestRun BacktestRun { get; private set; }
 
         public bool IsWarmedUp => BacktestRun.Parameters?.WarmupPeriod == 0 ||
                                   _lastSliceProcessed?.SequenceNumber > BacktestRun.Parameters?.WarmupPeriod;
 
-        public BacktestRun Initialize(IBroker broker, BacktestParameters parameters)
+        public BacktestRun Initialize(IBroker broker, BacktestParameters parameters, IStrategyParameters strategyParameters)
         {
             if (parameters == null) throw new ArgumentNullException(nameof(parameters));
             _broker = broker ?? throw new ArgumentNullException(nameof(broker));
@@ -28,12 +30,12 @@ namespace Stratysis.Domain.Strategies
 
             _indicators.Clear();
 
-            Initialize(parameters);
+            Initialize(parameters, strategyParameters);
 
             return BacktestRun;
         }
 
-        public virtual void Initialize(BacktestParameters parameters)
+        public virtual void Initialize(BacktestParameters parameters, IStrategyParameters strategyParameters)
         { }
 
         public void OnDataEvent(Slice slice)

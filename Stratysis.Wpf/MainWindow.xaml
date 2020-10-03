@@ -4,10 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Stratysis.Wpf"
+        xmlns:views="clr-namespace:Stratysis.Wpf.Views"
         mc:Ignorable="d"
         DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Stratysis Backtester">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="200"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+        </Grid.RowDefinitions>
 
+        <views:ParametersView DataContext="{Binding ParametersViewModel}"></views:ParametersView>
+        <views:ChartsView DataContext="{Binding ChartsViewModel}" Grid.Row="1"></views:ChartsView>
     </Grid>
 </Window>

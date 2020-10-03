@@ -66,10 +66,19 @@ namespace Stratysis.Console
                 Commission = 0
             };
 
-            var strategy = new SimpleBreakoutStrategy(20, 10, 20);
+            var strategy = new SimpleBreakoutStrategy();
+
             var runner = container.Resolve<IStrategyRunner>();
 
-            var backtestRun = await runner.RunAsync(strategy, backtestParameters);
+            var backtestRun = await runner.RunAsync(
+                strategy, 
+                backtestParameters,
+                new SimpleBreakoutStrategyParameters
+                {
+                    EntryBreakoutPeriod = 20,
+                    ExitBreakoutPeriod = 10,
+                    SmaPeriod = 20
+                });
 
             
             System.Console.ReadKey();
