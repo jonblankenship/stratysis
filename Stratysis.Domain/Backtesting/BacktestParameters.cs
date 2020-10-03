@@ -7,7 +7,7 @@ namespace Stratysis.Domain.Backtesting
 {
     public class BacktestParameters
     {
-        public DateTime StartDateTime { get; set; } = new DateTime(2020, 1, 1);
+        public DateTime StartDateTime { get; set; } = new DateTime(2019, 1, 1);
 
         public DateTime EndDateTime { get; set; } = new DateTime(2020, 6, 30);
 

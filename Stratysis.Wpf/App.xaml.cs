@@ -57,6 +57,7 @@ namespace Stratysis.Wpf
                             services.AddSingleton<IDataManager, DataManager>();
                             services.AddSingleton<IUniverseFactory, UniverseFactory>();
                             services.AddSingleton<IBroker, MockBroker>();
+                            services.AddSingleton<IApplicationState, ApplicationState>();
                             services.AddSingleton<IStrategiesService, StrategiesService>();
 
                             // Register ViewModels

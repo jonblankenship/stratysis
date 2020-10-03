@@ -16,12 +16,16 @@ namespace Stratysis.Domain.Backtesting
 
         public DateTime? LastDateTimeProcessed => _lastSlice?.DateTime;
 
+        public bool IsComplete { get; private set; } = false;
+
         public decimal PercentComplete
         {
             get
             {
                 if (_lastSlice == null)
+                {
                     return 0;
+                }
 
                 decimal totalTicks = _parameters.EndDateTime.Ticks - _parameters.StartDateTime.Ticks;
                 decimal elapsedTicks = _lastSlice.DateTime.Ticks - _parameters.StartDateTime.Ticks;
@@ -31,12 +35,20 @@ namespace Stratysis.Domain.Backtesting
         
         public void ProcessSlice(Slice slice)
         {
-            var lastPercentage = PercentComplete;
-            _lastSlice = slice;
-            if (Math.Floor(PercentComplete * 100) % 5 == 0 && Math.Floor(PercentComplete * 100) != Math.Floor(lastPercentage * 100))
+            if (slice == null)
             {
-                Debug.WriteLine($"Progress: {PercentComplete}");
+                IsComplete = true;
                 ProgressChanged?.Invoke(this, null);
+            }
+            else
+            {
+                var lastPercentage = PercentComplete;
+                _lastSlice = slice;
+                if (Math.Floor(PercentComplete * 100) % 5 == 0 && Math.Floor(PercentComplete * 100) != Math.Floor(lastPercentage * 100))
+                {
+                    Debug.WriteLine($"Progress: {PercentComplete}");
+                    ProgressChanged?.Invoke(this, null);
+                }
             }
         }
 

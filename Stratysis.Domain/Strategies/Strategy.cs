@@ -26,7 +26,7 @@ namespace Stratysis.Domain.Strategies
         {
             if (parameters == null) throw new ArgumentNullException(nameof(parameters));
             _broker = broker ?? throw new ArgumentNullException(nameof(broker));
-            BacktestRun = new BacktestRun(parameters);
+            BacktestRun = new BacktestRun(parameters, strategyParameters);
 
             _indicators.Clear();
 
@@ -38,7 +38,7 @@ namespace Stratysis.Domain.Strategies
         public virtual void Initialize(BacktestParameters parameters, IStrategyParameters strategyParameters)
         { }
 
-        public void OnDataEvent(Slice slice)
+        public void OnDataEvent(object sender, Slice slice)
         {
             if (slice != null)
             {
@@ -53,6 +53,8 @@ namespace Stratysis.Domain.Strategies
                 // End of data stream
                 BacktestRun.Results.CalculateResults(_broker.DefaultAccount, _lastSliceProcessed);
                 Debug.WriteLine(BacktestRun.Results);
+
+                ReportProgress(null);
             }
         }
 
@@ -95,6 +97,8 @@ namespace Stratysis.Domain.Strategies
 
         private void PreProcessNewData(Slice slice)
         {
+            BacktestRun.Data.Add(slice);
+
             // Calculate any indicator values for the slice, perform other pre-processing
             _broker.EvaluateOrders(slice);
 

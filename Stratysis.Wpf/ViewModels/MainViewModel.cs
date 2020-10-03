@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.ComponentModel;
+using GalaSoft.MvvmLight;
 using Stratysis.Domain.Interfaces;
 
 namespace Stratysis.Wpf.ViewModels
@@ -15,10 +16,31 @@ namespace Stratysis.Wpf.ViewModels
             _strategyRunner = strategyRunner;
             ParametersViewModel = parametersViewModel;
             ChartsViewModel = chartsViewModel;
+
+            ParametersViewModel.PropertyChanged += ParametersViewModelOnPropertyChanged;
         }
 
         public ParametersViewModel ParametersViewModel { get; }
 
         public ChartsViewModel ChartsViewModel { get; }
+
+        private bool _isBusy = false;
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set
+            {
+                _isBusy = value;
+                RaisePropertyChanged(nameof(IsBusy));
+            }
+        }
+        
+        private void ParametersViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ParametersViewModel.IsRunningBacktest))
+            {
+                IsBusy = ParametersViewModel.IsRunningBacktest;
+            }
+        }
     }
 }

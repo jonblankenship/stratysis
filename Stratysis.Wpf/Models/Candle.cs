@@ -18,10 +18,10 @@ namespace Stratysis.Wpf.Models
         public Candle(Slice slice, string security)
         {
             t = slice.DateTime;
-            O = (double)slice[security].Open;
-            H = (double)slice[security].High;
-            L = (double)slice[security].Low;
-            C = (double)slice[security].Close;
+            O = Math.Round((double)slice[security].Open, 5);
+            H = Math.Round((double)slice[security].High, 5);
+            L = Math.Round((double)slice[security].Low, 5);
+            C = Math.Round((double)slice[security].Close, 5);
             V = 0;
         }
 

@@ -96,6 +96,7 @@ namespace Stratysis.Console
             builder.RegisterType<DataManager>().As<IDataManager>();
             builder.RegisterType<UniverseFactory>().As<IUniverseFactory>();
             builder.RegisterType<MockBroker>().As<IBroker>();
+            builder.RegisterType<ApplicationState>().As<IApplicationState>();
             builder.RegisterInstance(appSettings);
             builder.RegisterInstance(appSettings).As<IDataProviderSettings>();
 

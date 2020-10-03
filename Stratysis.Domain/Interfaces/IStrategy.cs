@@ -10,7 +10,7 @@ namespace Stratysis.Domain.Interfaces
 
         BacktestRun Initialize(IBroker broker, BacktestParameters parameters, IStrategyParameters strategyParameters);
 
-        void OnDataEvent(Slice slice);
+        void OnDataEvent(object sender, Slice e);
 
         event EventHandler<Progress> ProgressReported;
     }

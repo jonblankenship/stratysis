@@ -5,17 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Stratysis.Wpf"
         xmlns:views="clr-namespace:Stratysis.Wpf.Views"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
         Title="Stratysis Backtester">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="200"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
-        </Grid.RowDefinitions>
+    <xctk:BusyIndicator IsBusy="{Binding IsBusy}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="200"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+            </Grid.RowDefinitions>
 
-        <views:ParametersView DataContext="{Binding ParametersViewModel}"></views:ParametersView>
-        <views:ChartsView DataContext="{Binding ChartsViewModel}" Grid.Row="1"></views:ChartsView>
-    </Grid>
+            <views:ParametersView DataContext="{Binding ParametersViewModel}"></views:ParametersView>
+            <views:ChartsView DataContext="{Binding ChartsViewModel}" Grid.Row="1"></views:ChartsView>
+        </Grid>
+    </xctk:BusyIndicator>
 </Window>

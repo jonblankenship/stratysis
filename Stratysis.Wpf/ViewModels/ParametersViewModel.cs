@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using Stratysis.Domain.Backtesting;
 using Stratysis.Domain.Interfaces;
 using Stratysis.Wpf.Commands;
@@ -16,15 +15,18 @@ namespace Stratysis.Wpf.ViewModels
     {
         private readonly IStrategiesService _strategiesService;
         private readonly IStrategyRunner _strategyRunner;
+        private readonly IApplicationState _applicationState;
         private IStrategy _selectedStrategy;
         private readonly StrategyParametersViewModelFactory _strategyParametersViewModelFactory = new StrategyParametersViewModelFactory();
 
         public ParametersViewModel(
             IStrategiesService strategiesService,
-            IStrategyRunner strategyRunner)
+            IStrategyRunner strategyRunner,
+            IApplicationState applicationState)
         {
             _strategiesService = strategiesService;
             _strategyRunner = strategyRunner;
+            _applicationState = applicationState;
             foreach (var strategyType in strategiesService.GetStrategyTypes())
             {
                 StrategyTypes.Add(strategyType);
@@ -64,6 +66,17 @@ namespace Stratysis.Wpf.ViewModels
             }
         }
 
+        private bool _isRunningBacktest = false;
+        public bool IsRunningBacktest
+        {
+            get => _isRunningBacktest;
+            set
+            {
+                _isRunningBacktest = value;
+                RaisePropertyChanged(nameof(IsRunningBacktest));
+            }
+        }
+
         public ICommand RunCommand { get; set; }
         
         private bool CanExecuteRunCommand(object arg)
@@ -77,10 +90,30 @@ namespace Stratysis.Wpf.ViewModels
 
         private async Task ExecuteRunCommandAsync(object arg)
         {
-            var results = await _strategyRunner.RunAsync(
+            IsRunningBacktest = true;
+
+            await _strategyRunner.RunAsync(
                 _selectedStrategy, 
                 BacktestParametersViewModel.BacktestParameters, 
                 StrategyParametersViewModel.StrategyParameters);
+
+            if (_applicationState.LastBacktestRun.Progress.IsComplete)
+            {
+                IsRunningBacktest = false;
+            }
+            else
+            {
+                _applicationState.LastBacktestRun.Progress.ProgressChanged += Progress_ProgressChanged;
+            }
+        }
+
+        private void Progress_ProgressChanged(object sender, EventArgs e)
+        {
+            if (((Progress)sender).IsComplete)
+            {
+                IsRunningBacktest = false;
+                _applicationState.LastBacktestRun.Progress.ProgressChanged -= Progress_ProgressChanged;
+            }
         }
     }
 }

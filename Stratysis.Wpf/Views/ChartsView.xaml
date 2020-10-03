@@ -7,7 +7,7 @@
              xmlns:fancyCandles="clr-namespace:FancyCandles;assembly=FancyCandles"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="White">
-        <!--<fancyCandles:CandleChart CandlesSource="{Binding Candles}" Width="800px" Height="500px" IsVolumePanelVisible="False" LegendText=""></fancyCandles:CandleChart>-->
+    <Grid Background="White" Margin="4">
+        <fancyCandles:CandleChart CandlesSource="{Binding Candles}" IsVolumePanelVisible="False" LegendText="" InitialCandleWidth="10"></fancyCandles:CandleChart>
     </Grid>
 </UserControl>

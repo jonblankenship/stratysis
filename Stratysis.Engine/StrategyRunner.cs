@@ -13,15 +13,18 @@ namespace Stratysis.Engine
         private readonly IUniverseFactory _universeFactory;
         private readonly IDataManager _dataManager;
         private readonly IBroker _broker;
+        private readonly IApplicationState _applicationState;
 
         public StrategyRunner(
             IUniverseFactory universeFactory, 
             IDataManager dataManager,
-            IBroker broker)
+            IBroker broker,
+            IApplicationState applicationState)
         {
             _universeFactory = universeFactory ?? throw new ArgumentNullException(nameof(universeFactory));
             _dataManager = dataManager ?? throw new ArgumentNullException(nameof(dataManager));
             _broker = broker ?? throw new ArgumentNullException(nameof(broker));
+            _applicationState = applicationState;
         }
 
         /// <summary>
@@ -41,10 +44,14 @@ namespace Stratysis.Engine
             _broker.Reset(parameters.StartingCash);
 
             var backtestRun = strategy.Initialize(_broker, parameters, strategyParameters);
-            
-            _dataManager.OnNewSlice += (sender, slice) => strategy.OnDataEvent(slice);
+
+            _applicationState.LastBacktestRun = backtestRun;
+
+            _dataManager.OnNewSlice += strategy.OnDataEvent;
 
             await _dataManager.RequestDataAsync(parameters, universe);
+
+            _dataManager.OnNewSlice -= strategy.OnDataEvent;
 
             return backtestRun;
         }
