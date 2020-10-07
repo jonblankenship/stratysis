@@ -49,7 +49,10 @@ namespace Stratysis.Domain.Core
                 var tempSlice = this;
                 while (absIndex > SliceCountToKeepInCache)
                 {
-                    tempSlice = RecentSlices.First();
+                    tempSlice = RecentSlices.FirstOrDefault();
+                    if (tempSlice is null)
+                        return null;
+
                     absIndex = absIndex - SliceCountToKeepInCache;
                 }
                 return tempSlice.RecentSlices.Reverse().Skip(absIndex - 1).FirstOrDefault();

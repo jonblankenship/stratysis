@@ -6,23 +6,19 @@ namespace Stratysis.Wpf.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        private readonly IStrategyRunner _strategyRunner;
-
         public MainViewModel(
-            IStrategyRunner strategyRunner,
             ParametersViewModel parametersViewModel,
-            ChartsViewModel chartsViewModel)
+            ResultsViewModel resultsViewModel)
         {
-            _strategyRunner = strategyRunner;
             ParametersViewModel = parametersViewModel;
-            ChartsViewModel = chartsViewModel;
-
+            ResultsViewModel = resultsViewModel;;
+            
             ParametersViewModel.PropertyChanged += ParametersViewModelOnPropertyChanged;
         }
 
         public ParametersViewModel ParametersViewModel { get; }
 
-        public ChartsViewModel ChartsViewModel { get; }
+        public ResultsViewModel ResultsViewModel { get; }
 
         private bool _isBusy = false;
         public bool IsBusy

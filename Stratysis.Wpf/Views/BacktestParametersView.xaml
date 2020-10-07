@@ -16,13 +16,20 @@
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"></ColumnDefinition>
                 <ColumnDefinition Width="100"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Label>Starting Cash</Label>
-            <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Margin="2" Text="{Binding StartingCash}"></TextBox>
+            <Label>Starting Cash:</Label>
+            <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Margin="2" Text="{Binding StartingCash}" TextAlignment="Right"></TextBox>
+            <Label Grid.Row="1">Start Date:</Label>
+            <DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding StartDateTime}"></DatePicker>
+            <Label Grid.Row="2">End Date:</Label>
+            <DatePicker Grid.Row="2" Grid.Column="1" SelectedDate="{Binding EndDateTime}"></DatePicker>
+            <Label Grid.Row="3">Warmup Period:</Label>
+            <TextBox Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" Margin="2" Text="{Binding WarmupPeriod}" TextAlignment="Right"></TextBox>
         </Grid>
     </Grid>
 </UserControl>

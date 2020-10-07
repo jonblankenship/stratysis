@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="Stratysis.Wpf.Views.PositionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Stratysis.Wpf.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <DataGrid ItemsSource="{Binding Positions}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Security" Binding="{Binding Security, Mode=OneWay}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Open Date" Binding="{Binding OpenDateTime, Mode=OneWay}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Direction" Binding="{Binding Direction, Mode=OneWay}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Status" Binding="{Binding Status, Mode=OneWay}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Size" Binding="{Binding MaxPositionSize, Mode=OneWay}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Close Date" Binding="{Binding CloseDateTime, Mode=OneWay}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Realized G/L (Pts)" Binding="{Binding RealizedGainLossPoints, Mode=OneWay}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Realized G/L ($)" Binding="{Binding RealizedGainLoss, Mode=OneWay}"></DataGridTextColumn>
+            </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Label>Trades</Label>
+                        <DataGrid ItemsSource="{Binding Trades}" AutoGenerateColumns="False" Margin="4" Grid.Row="1">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="DateTime" Binding="{Binding FillDateTime, Mode=OneWay}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Action" Binding="{Binding Order.Action, Mode=OneWay}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Qty" Binding="{Binding FillQuantity, Mode=OneWay}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Price" Binding="{Binding FillPrice, Mode=OneWay}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+        </DataGrid>
+            
+    </Grid>
+</UserControl>

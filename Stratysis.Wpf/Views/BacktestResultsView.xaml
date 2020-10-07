@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="Stratysis.Wpf.Views.BacktestResultsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Stratysis.Wpf.Views"
+             xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label>Realized G/L ($):</Label>
+            <TextBlock Grid.Column="1" Text="{Binding TotalRealizedGainLoss, StringFormat={}{0:C2}}" HorizontalAlignment="Right" Margin="4,4,20,4"></TextBlock>
+            <Label Grid.Row="1">Realized G/L (Pts):</Label>
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding TotalRealizedGainLossPoints, StringFormat={}{0:N5}}" HorizontalAlignment="Right" Margin="4,4,20,4"></TextBlock>
+            <Label Grid.Row="2">Starting Balance:</Label>
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding StartingAccountBalance, StringFormat={}{0:C2}}" HorizontalAlignment="Right" Margin="4,4,20,4"></TextBlock>
+            <Label Grid.Row="3">Ending Balance:</Label>
+            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding FinalAccountBalance, StringFormat={}{0:C2}}" HorizontalAlignment="Right" Margin="4,4,20,4"></TextBlock>
+            <Label Grid.Row="4">Expectancy:</Label>
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Expectancy, StringFormat={}{0:N5}}" HorizontalAlignment="Right" Margin="4,4,20,4"></TextBlock>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0">Closed Trades:</Label>
+            <TextBlock Grid.Column="1" Text="{Binding TotalClosedTrades}" HorizontalAlignment="Right" Margin="4,4,20,4"></TextBlock>
+            <Label Grid.Row="1">Open Trades:</Label>
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding RemainingOpenTrades}" HorizontalAlignment="Right" Margin="4,4,20,4"></TextBlock>
+            <Label Grid.Row="2">Wins:</Label>
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Wins}" HorizontalAlignment="Right" Margin="4,4,20,4"></TextBlock>
+            <Label Grid.Row="3">Losses:</Label>
+            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Losses}" HorizontalAlignment="Right" Margin="4,4,20,4"></TextBlock>
+            <Label Grid.Row="4">Win Pct:</Label>
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding WinPercentage, StringFormat={}{0:P2}}" HorizontalAlignment="Right" Margin="4,4,20,4"></TextBlock>
+        </Grid>
+
+        <chartingToolkit:Chart Grid.Row="1" Grid.ColumnSpan="3" Margin="4">
+            <chartingToolkit:Chart.LegendStyle>
+                <Style TargetType="Control">
+                    <Setter Property="Width" Value="0"/>
+                    <Setter Property="Height" Value="0"/>
+                </Style>
+            </chartingToolkit:Chart.LegendStyle>
+            <chartingToolkit:Chart.Series>
+                <chartingToolkit:LineSeries 
+                    ItemsSource="{Binding AccountBalanceSeries}" 
+                    IndependentValueBinding="{Binding Key}" 
+                    DependentValueBinding="{Binding Value}">
+                    <chartingToolkit:LineSeries.DataPointStyle>
+                        <Style TargetType="Control">
+                            <Setter Property="Width" Value="0"></Setter>
+                            <Setter Property="Height" Value="0"></Setter>
+                        </Style>
+                    </chartingToolkit:LineSeries.DataPointStyle>
+                </chartingToolkit:LineSeries>
+            </chartingToolkit:Chart.Series>
+        </chartingToolkit:Chart>
+    </Grid>
+</UserControl>

@@ -51,5 +51,10 @@ namespace Stratysis.Domain.Core.Broker
         /// The realized gain/loss for this <see cref="Trade"/>, including commission
         /// </summary>
         public decimal RealizedGainLoss { get; set; }
+
+        /// <summary>
+        /// The realized gain/loss for this <see cref="Trade"/>, in points, excluding commission
+        /// </summary>
+        public decimal RealizedGainLossPoints { get; set; }
     }
 }

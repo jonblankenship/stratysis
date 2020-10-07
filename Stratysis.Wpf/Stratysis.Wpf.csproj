@@ -14,6 +14,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.8" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.8" />
     <PackageReference Include="MvvmLightLibsStd10" Version="5.4.1.1" />
+    <PackageReference Include="System.Windows.Controls.DataVisualization.Toolkit" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\ChartsView.xaml.cs">
+    <Compile Update="Views\CandlestickChartView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -35,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="Views\ChartsView.xaml">
+    <Page Update="Views\CandlestickChartView.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

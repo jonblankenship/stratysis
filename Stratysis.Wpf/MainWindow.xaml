@@ -8,17 +8,17 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
-        Title="Stratysis Backtester">
+        Title="Stratysis Backtester" Width="800">
     <xctk:BusyIndicator IsBusy="{Binding IsBusy}">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="200"></RowDefinition>
+                <RowDefinition Height="220"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="50"></RowDefinition>
             </Grid.RowDefinitions>
 
             <views:ParametersView DataContext="{Binding ParametersViewModel}"></views:ParametersView>
-            <views:ChartsView DataContext="{Binding ChartsViewModel}" Grid.Row="1"></views:ChartsView>
+            <views:ResultsView DataContext="{Binding ResultsViewModel}" Grid.Row="1"></views:ResultsView>
         </Grid>
     </xctk:BusyIndicator>
 </Window>

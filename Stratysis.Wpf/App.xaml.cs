@@ -63,12 +63,21 @@ namespace Stratysis.Wpf
                             // Register ViewModels
                             services.AddSingleton<MainViewModel>();
                             services.AddSingleton<ParametersViewModel>();
-                            services.AddSingleton<ChartsViewModel>();
+                            services.AddSingleton<BacktestParametersViewModel>();
+                            services.AddSingleton<ResultsViewModel>();
+                            services.AddSingleton<BacktestResultsViewModel>();
+                            services.AddSingleton<PositionsViewModel>();
+                            services.AddSingleton<CandlestickChartViewModel>();
 
                             // Register Views
                             services.AddSingleton<MainWindow>();
-                            services.AddSingleton<ParametersView>();
-                            services.AddSingleton<ChartsView>();
+                            services.AddSingleton<ParametersView>(); 
+                            services.AddSingleton<BacktestParametersView>();
+                            services.AddSingleton<ResultsView>();
+                            services.AddSingleton<BacktestResultsView>();
+                            services.AddSingleton<PositionsView>();
+                            services.AddSingleton<CandlestickChartView>();
+                            
                         })
                         .ConfigureLogging(logging =>
                         {

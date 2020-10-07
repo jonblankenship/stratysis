@@ -8,11 +8,11 @@ using Stratysis.Wpf.Models;
 
 namespace Stratysis.Wpf.ViewModels
 {
-    public class ChartsViewModel : ViewModelBase
+    public class CandlestickChartViewModel : ViewModelBase
     {
         private readonly IApplicationState _applicationState;
 
-        public ChartsViewModel(IApplicationState applicationState)
+        public CandlestickChartViewModel(IApplicationState applicationState)
         {
             _applicationState = applicationState;
             _applicationState.NewLastBacktestRun += ApplicationState_NewLastBacktestRun;
@@ -22,12 +22,11 @@ namespace Stratysis.Wpf.ViewModels
         {
             if (_applicationState.LastBacktestRun.Progress.IsComplete)
             {
-                var candles = new ObservableCollection<ICandle>();
+                Candles.Clear();
                 foreach (var s in _applicationState.LastBacktestRun.Data)
                 {
-                    candles.Add(new Candle(s, s.Securities.First()));
+                    Candles.Add(new Candle(s, s.Securities.First()));
                 }
-                Candles = candles;
                 
                 _applicationState.LastBacktestRun.Progress.ProgressChanged -= Progress_ProgressChanged;
             }
@@ -38,7 +37,7 @@ namespace Stratysis.Wpf.ViewModels
             _applicationState.LastBacktestRun.Progress.ProgressChanged += Progress_ProgressChanged;
         }
 
-        private ObservableCollection<ICandle> _candles;
+        private ObservableCollection<ICandle> _candles = new ObservableCollection<ICandle> { new Candle(new DateTime(2020, 1, 1), 0, 0, 0, 0, 0) };
         public ObservableCollection<ICandle> Candles
         {
             get => _candles;

@@ -24,6 +24,8 @@ namespace Stratysis.Domain.Core.Broker
             Status = PositionStatus.Open;
             Direction = order.Action == OrderAction.Buy ? PositionDirection.Long : PositionDirection.Short;
             PositionSize = fillDetails.Quantity;
+            MaxPositionSize = PositionSize;
+            OpenDateTime = fillDetails.DateTime;
             
             _trades.Add(new Trade(order, fillDetails));
             
@@ -31,6 +33,16 @@ namespace Stratysis.Domain.Core.Broker
 
             CalculateRealizedGainLoss();
         }
+
+        /// <summary>
+        /// The date this <see cref="Position"/> was opened
+        /// </summary>
+        public DateTime OpenDateTime { get; }
+
+        /// <summary>
+        /// The date this <see cref="Position"/> was opened
+        /// </summary>
+        public DateTime? CloseDateTime { get; private set; }
 
         /// <summary>
         /// The symbol of the security for this <see cref="Position"/>
@@ -53,9 +65,19 @@ namespace Stratysis.Domain.Core.Broker
         public decimal RealizedGainLoss => Trades.Sum(t => t.RealizedGainLoss);
 
         /// <summary>
+        /// The realized gain/loss of this <see cref="Position"/> in points
+        /// </summary>
+        public decimal RealizedGainLossPoints => Trades.Sum(t => t.RealizedGainLossPoints);
+
+        /// <summary>
         /// The size of this <see cref="Position"/>
         /// </summary>
         public int PositionSize { get; private set; }
+
+        /// <summary>
+        /// The maximum size of this <see cref="Position"/> during its lifetime
+        /// </summary>
+        public int MaxPositionSize { get; private set; }
 
         /// <summary>
         /// The <see cref="Trade"/>s executed to establish, increase, reduce or close this <see cref="Position"/>
@@ -91,6 +113,7 @@ namespace Stratysis.Domain.Core.Broker
                 newTrade = new Trade(order, fillDetails);
                 _trades.Add(newTrade);
                 PositionSize += fillDetails.Quantity;
+                MaxPositionSize = Math.Max(PositionSize, MaxPositionSize);
             }
             else
             {
@@ -104,6 +127,7 @@ namespace Stratysis.Domain.Core.Broker
                 if (PositionSize == 0)
                 {
                     Status = PositionStatus.Closed;
+                    CloseDateTime = fillDetails.DateTime;
                 }
             }
 
@@ -222,6 +246,7 @@ namespace Stratysis.Domain.Core.Broker
             {
                 if (trade.Order.Action == OrderAction.Buy)
                 {
+                    trade.RealizedGainLossPoints = 0;
                     trade.RealizedGainLoss = 0 - trade.Commission;
                     fillsQueue.Enqueue(new FillDetails(trade.FillDateTime, trade.FillPrice, trade.Commission, trade.FillQuantity));
                 }
@@ -232,14 +257,16 @@ namespace Stratysis.Domain.Core.Broker
                     {
                         while (fillQuantity >= fillsQueue.FirstOrDefault()?.Quantity)
                         {
-                            trade.RealizedGainLoss = (trade.FillPrice - fillsQueue.First().Price) * fillsQueue.First().Quantity - trade.Commission;
+                            trade.RealizedGainLossPoints = trade.FillPrice - fillsQueue.First().Price;
+                            trade.RealizedGainLoss = trade.RealizedGainLossPoints * fillsQueue.First().Quantity - trade.Commission;
                             fillQuantity -= fillsQueue.First().Quantity;
                             fillsQueue.Dequeue();
                         }
 
                         if (fillQuantity > 0 && fillQuantity < fillsQueue.FirstOrDefault()?.Quantity)
                         {
-                            trade.RealizedGainLoss = (trade.FillPrice - fillsQueue.First().Price) * fillQuantity - trade.Commission;
+                            trade.RealizedGainLossPoints = trade.FillPrice - fillsQueue.First().Price;
+                            trade.RealizedGainLoss = trade.RealizedGainLossPoints * fillQuantity - trade.Commission;
                             var fill = fillsQueue.First();
                             fill.Quantity -= fillQuantity;
                             fillQuantity = 0;
@@ -257,6 +284,7 @@ namespace Stratysis.Domain.Core.Broker
             {
                 if (trade.Order.Action == OrderAction.Sell)
                 {
+                    trade.RealizedGainLossPoints = 0;
                     trade.RealizedGainLoss = 0 - trade.Commission;
                     fillsQueue.Enqueue(new FillDetails(trade.FillDateTime, trade.FillPrice, trade.Commission, trade.FillQuantity));
                 }
@@ -267,14 +295,16 @@ namespace Stratysis.Domain.Core.Broker
                     {
                         while (fillQuantity >= fillsQueue.FirstOrDefault()?.Quantity)
                         {
-                            trade.RealizedGainLoss = (fillsQueue.First().Price - trade.FillPrice) * fillsQueue.First().Quantity - trade.Commission;
+                            trade.RealizedGainLossPoints = fillsQueue.First().Price - trade.FillPrice;
+                            trade.RealizedGainLoss = trade.RealizedGainLossPoints * fillsQueue.First().Quantity - trade.Commission;
                             fillQuantity -= fillsQueue.First().Quantity;
                             fillsQueue.Dequeue();
                         }
 
                         if (fillQuantity > 0 && fillQuantity < fillsQueue.FirstOrDefault().Quantity)
                         {
-                            trade.RealizedGainLoss = (fillsQueue.First().Price - trade.FillPrice) * fillQuantity - trade.Commission;
+                            trade.RealizedGainLossPoints = fillsQueue.First().Price - trade.FillPrice;
+                            trade.RealizedGainLoss = trade.RealizedGainLossPoints * fillQuantity - trade.Commission;
                             var fill = fillsQueue.First();
                             fill.Quantity -= fillQuantity;
                             fillQuantity = 0;

@@ -12,7 +12,7 @@ namespace Stratysis.Wpf
 
         public ParametersViewModel ParametersViewModel => App.ServiceProvider.GetRequiredService<ParametersViewModel>();
 
-        public ChartsViewModel ChartsViewModel => App.ServiceProvider.GetRequiredService<ChartsViewModel>();
+        public CandlestickChartViewModel CandlestickChartViewModel => App.ServiceProvider.GetRequiredService<CandlestickChartViewModel>();
 
     }
 }

@@ -13,12 +13,9 @@ using System.Windows.Shapes;
 
 namespace Stratysis.Wpf.Views
 {
-    /// <summary>
-    /// Interaction logic for ParametersView.xaml
-    /// </summary>
-    public partial class ChartsView : UserControl
+    public partial class PositionsView : UserControl
     {
-        public ChartsView()
+        public PositionsView()
         {
             InitializeComponent();
         }

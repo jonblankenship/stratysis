@@ -15,11 +15,11 @@
             <ColumnDefinition Width="150"></ColumnDefinition>
             <ColumnDefinition Width="100"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Label>Entry Breakout Period</Label>
-        <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Margin="2" Text="{Binding EntryBreakoutPeriod}"></TextBox>
-        <Label Grid.Row="1">Exit Breakout Period</Label>
-        <TextBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Margin="2" Text="{Binding ExitBreakoutPeriod}"></TextBox>
-        <Label Grid.Row="2">SMA Period</Label>
-        <TextBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" Margin="2" Text="{Binding SmaPeriod}"></TextBox>
+        <Label>Entry Breakout Period:</Label>
+        <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Margin="2" Text="{Binding EntryBreakoutPeriod}" TextAlignment="Right"></TextBox>
+        <Label Grid.Row="1">Exit Breakout Period:</Label>
+        <TextBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Margin="2" Text="{Binding ExitBreakoutPeriod}" TextAlignment="Right"></TextBox>
+        <Label Grid.Row="2">SMA Period:</Label>
+        <TextBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" Margin="2" Text="{Binding SmaPeriod}" TextAlignment="Right"></TextBox>
     </Grid>
 </UserControl>
