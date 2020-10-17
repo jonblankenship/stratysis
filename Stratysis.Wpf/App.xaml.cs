@@ -15,6 +15,7 @@ using Stratysis.DataProviders.Quandl.Clients;
 using Stratysis.Domain.Brokers;
 using Stratysis.Domain.DataProviders;
 using Stratysis.Domain.Interfaces;
+using Stratysis.Domain.PositionSizing;
 using Stratysis.Domain.Settings;
 using Stratysis.Domain.Universes;
 using Stratysis.Engine;
@@ -57,6 +58,7 @@ namespace Stratysis.Wpf
                             services.AddSingleton<IDataManager, DataManager>();
                             services.AddSingleton<IUniverseFactory, UniverseFactory>();
                             services.AddSingleton<IBroker, MockBroker>();
+                            services.AddSingleton<IPositionSizer, PositionSizer>();
                             services.AddSingleton<IApplicationState, ApplicationState>();
                             services.AddSingleton<IStrategiesService, StrategiesService>();
 

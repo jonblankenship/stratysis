@@ -6,12 +6,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Stratysis.Domain.Core.Broker;
+using Stratysis.Domain.PositionSizing;
 
 namespace Stratysis.Domain.Strategies
 {
     public class Strategy: IStrategy
     {
         private IBroker _broker;
+        protected IPositionSizer _positionSizer;
         private Slice _lastSliceProcessed;
         private readonly IList<IIndicator> _indicators = new List<IIndicator>();
 
@@ -22,10 +24,16 @@ namespace Stratysis.Domain.Strategies
         public bool IsWarmedUp => BacktestRun.Parameters?.WarmupPeriod == 0 ||
                                   _lastSliceProcessed?.SequenceNumber > BacktestRun.Parameters?.WarmupPeriod;
 
-        public BacktestRun Initialize(IBroker broker, BacktestParameters parameters, IStrategyParameters strategyParameters)
+        public BacktestRun Initialize(
+            IBroker broker, 
+            IPositionSizer positionSizer,
+            BacktestParameters parameters, 
+            IStrategyParameters strategyParameters)
         {
             if (parameters == null) throw new ArgumentNullException(nameof(parameters));
             _broker = broker ?? throw new ArgumentNullException(nameof(broker));
+            _positionSizer = positionSizer ?? throw new ArgumentNullException(nameof(positionSizer));
+            _positionSizer.Initialize(parameters.PositionSizingParameters);
             BacktestRun = new BacktestRun(parameters, strategyParameters);
 
             _indicators.Clear();
@@ -66,6 +74,8 @@ namespace Stratysis.Domain.Strategies
 
         public Position GetOpenPosition(string security) => _broker.GetOpenPosition(security);
 
+        public Account GetAccount() => _broker.DefaultAccount;
+        
         public void BuyAtMarket(string security, int quantity)
         {
             var order = new Order

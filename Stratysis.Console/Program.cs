@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Stratysis.DataProviders.Oanda.Clients;
 using Stratysis.Domain.Brokers;
 using Stratysis.Domain.Core;
+using Stratysis.Domain.PositionSizing;
 using Stratysis.Strategies;
 
 namespace Stratysis.Console
@@ -96,6 +97,7 @@ namespace Stratysis.Console
             builder.RegisterType<DataManager>().As<IDataManager>();
             builder.RegisterType<UniverseFactory>().As<IUniverseFactory>();
             builder.RegisterType<MockBroker>().As<IBroker>();
+            builder.RegisterType<PositionSizer>().As<IPositionSizer>();
             builder.RegisterType<ApplicationState>().As<IApplicationState>();
             builder.RegisterInstance(appSettings);
             builder.RegisterInstance(appSettings).As<IDataProviderSettings>();

@@ -78,7 +78,7 @@ namespace Stratysis.Strategies
                 // Check for long entry criteria
                 if (slice[security].High > _highLong[security][-1] && _sma[security][0] > _sma[security][-3])
                 {
-                    BuyAtMarket(security, 100);
+                    BuyAtMarket(security, _positionSizer.GetSize(slice[security][0].Close, GetAccount().AccountBalance));
                     Debug.WriteLine($"{slice.DateTime} Entry: Buy at {slice[security][0].Close}");
                 }
                 else
@@ -86,7 +86,7 @@ namespace Stratysis.Strategies
                     // Check for short entry criteria
                     if (slice[security].Low < _lowLong[security][-1] && _sma[security][0] < _sma[security][-3])
                     {
-                        SellAtMarket(security, 100);
+                        SellAtMarket(security, _positionSizer.GetSize(slice[security][0].Close, GetAccount().AccountBalance));
                         Debug.WriteLine($"{slice.DateTime} Entry: Sell at {slice[security][0].Close}");
                     }
                 }
@@ -100,7 +100,7 @@ namespace Stratysis.Strategies
                 // Check for long exit criteria
                 if (slice[security].Low < _lowShort[security][-1])
                 {
-                    SellAtMarket(security, 100);
+                    SellAtMarket(security, openPosition.PositionSize);
                 }
             }
             else
@@ -108,7 +108,7 @@ namespace Stratysis.Strategies
                 // Check for short exit criteria
                 if (slice[security].High < _highShort[security][-1])
                 {
-                    BuyAtMarket(security, 100);
+                    BuyAtMarket(security, openPosition.PositionSize);
                 }
             }
         }
